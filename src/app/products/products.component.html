@@ -1,1 +1,56 @@
-<p>products works!</p>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="product_name">
+    <th mat-header-cell *matHeaderCellDef>Product Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.product_name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="product_model">
+    <th mat-header-cell *matHeaderCellDef>Product Model</th>
+    <td mat-cell *matCellDef="let element">{{ element.product_model }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="brand_name">
+    <th mat-header-cell *matHeaderCellDef>Brand Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.brand_name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>Price</th>
+    <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="stock_on_hand">
+    <th mat-header-cell *matHeaderCellDef>Stock on hand</th>
+    <td mat-cell *matCellDef="let element">{{ element.stock_on_hand }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="image">
+    <th mat-header-cell *matHeaderCellDef>Image</th>
+    <td mat-cell *matCellDef="let element">{{ element.image }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef>Delete</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon (click)="deleteProduct(element.product_id)">delete</mat-icon>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="edit">
+    <th mat-header-cell *matHeaderCellDef>Edit</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon (click)="editProduct(element)">edit</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<br />
+
+<section>
+  <button mat-raised-button color="primary" (click)="addNewProduct()">
+    Add New Product
+  </button>
+</section>

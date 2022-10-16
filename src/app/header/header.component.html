@@ -1,0 +1,77 @@
+<nav id="my-first">
+  <ul>
+    <li class="logo">
+      <a routerLink="/home">TAFE SUNNIES</a>
+    </li>
+
+    <li>
+      <button
+        mat-icon-button
+        color="accent"
+        class="burger"
+        (click)="toggleMenu()"
+      >
+        <mat-icon>{{ !isMenuOpen ? "menu" : "close" }}</mat-icon>
+      </button>
+    </li>
+
+    <li class="menu" [class.is-open]="isMenuOpen">
+      <a
+        *ngIf="_authService.loggedIn()"
+        class="menu-item"
+        routerLink="/home"
+        routerLinkActive="=list-item-active"
+        >Home</a
+      >
+
+      <a
+        *ngIf="_authService.loggedIn()"
+        class="menu-item"
+        routerLink="/products"
+        routerLinkActive="=list-item-active"
+        >Products</a
+      >
+
+      <a
+        *ngIf="_authService.loggedIn()"
+        class="menu-item"
+        routerLink="/admin"
+        routerLinkActive="=list-item-active"
+        >Admin</a
+      >
+
+      <!-- <a
+        *ngIf="_authService.loggedIn()"
+        class="menu-item"
+        routerLink="/changelog"
+        routerLinkActive="=list-item-active"
+        >Change Log</a
+      > -->
+
+      <a routerLink="/login" routerLinkActive="active" class="menu-item"
+        ><button
+          routerLinkActive="=list-item-active"
+          *ngIf="!_authService.loggedIn()"
+          mat-raised-button
+          color="primary"
+        >
+          Login
+        </button></a
+      >
+      <a mat-list-item *ngIf="_authService.loggedIn()"
+        ><button
+          routerLinkActive="=list-item-active"
+          mat-raised-button
+          color="secondary"
+          (click)="_authService.logoutUser()"
+        >
+          Logout
+        </button></a
+      >
+    </li>
+  </ul>
+</nav>
+
+<div class="footer">
+  <span class="footer-text">&copy; TAFE SUNNIES 2022</span>
+</div>

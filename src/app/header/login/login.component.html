@@ -1,0 +1,38 @@
+<mat-card class="card">
+  <mat-card-content>
+    <div class="header"><h2>LOGIN</h2></div>
+
+    <form>
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          [(ngModel)]="loginUserData.username"
+          name="username"
+          required
+        />
+      </mat-form-field>
+      <br />
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [(ngModel)]="loginUserData.password"
+          name="password"
+          type="password"
+          required=""
+        />
+      </mat-form-field>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn btn-success pull-right"
+          (click)="loginAdmin()"
+        >
+          Login
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

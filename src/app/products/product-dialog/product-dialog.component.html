@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>Add a new product</h2>
+
+<form [formGroup]="productForm">
+  <mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Product Name</mat-label>
+      <input matInput formControlName="product_name" />
+    </mat-form-field>
+    <br />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Product Model</mat-label>
+      <input matInput formControlName="product_model" />
+    </mat-form-field>
+    <br />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Brand Name</mat-label>
+      <input matInput formControlName="manufacturer" />
+    </mat-form-field>
+    <br />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Image</mat-label>
+      <input matInput formControlName="imageUrl" />
+    </mat-form-field>
+    <br />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Price</mat-label>
+      <input
+        matInput
+        type="number"
+        class="example-right-align"
+        formControlName="price"
+      />
+      <span matPrefix>$&nbsp;</span>
+    </mat-form-field>
+    <br />
+
+    <mat-form-field appearance="fill">
+      <mat-label>Stock on hand</mat-label>
+      <input matInput type="number" formControlName="stock_on_hand" />
+    </mat-form-field>
+    <br />
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="productForm.invalid"
+      (click)="addNewProduct()"
+    >
+      {{ product ? "Save" : "Add" }}
+    </button>
+
+    <button mat-button [mat-dialog-close]="true">Cancel</button>
+  </mat-dialog-actions>
+</form>

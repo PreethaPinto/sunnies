@@ -1,0 +1,51 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="admin_id">
+    <th mat-header-cell *matHeaderCellDef>Admin ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.user_id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="first_name">
+    <th mat-header-cell *matHeaderCellDef>First Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.first_name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="last_name">
+    <th mat-header-cell *matHeaderCellDef>Last Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.last_name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="admin_role">
+    <th mat-header-cell *matHeaderCellDef>Admin Role</th>
+    <td mat-cell *matCellDef="let element">{{ element.admin_role }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="username">
+    <th mat-header-cell *matHeaderCellDef>Username</th>
+    <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef>Delete</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon (click)="deleteAdmin(element.user_id)">delete</mat-icon>
+    </td></ng-container
+  >
+
+  <ng-container matColumnDef="edit">
+    <th mat-header-cell *matHeaderCellDef>Edit</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon (click)="editAdmin(element)">edit</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<br />
+
+<section>
+  <button mat-raised-button color="primary" (click)="addNewAdmin()">
+    Add New User
+  </button>
+</section>
