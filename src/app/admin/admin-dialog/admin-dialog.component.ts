@@ -28,10 +28,10 @@ export class AdminDialogComponent implements OnInit {
     ),
   });
 
-  addNewadmin() {
+  addNewAdmin() {
     this.service.addNewAdmin(this.adminForm.value as Admin).subscribe();
   }
-  updateadmin() {
+  updateAdmin() {
     var admin: any = this.adminForm.value;
     admin.admin_id = this.admin.admin_id;
     this.service.updateAdmin(this.adminForm.value as Admin).subscribe();
