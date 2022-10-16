@@ -18,6 +18,11 @@ import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './header/login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminDialogComponent } from './admin/admin-dialog/admin-dialog.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -36,10 +41,15 @@ import { AdminDialogComponent } from './admin/admin-dialog/admin-dialog.componen
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    HttpClientModule,
     MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
     MatToolbarModule,
     MatCardModule,
     MatDialogModule,
+    MatSnackBarModule,
     FormsModule,
     MatTableModule,
     MatIconModule,
