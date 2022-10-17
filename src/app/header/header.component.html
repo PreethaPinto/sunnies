@@ -63,9 +63,19 @@
           routerLinkActive="=list-item-active"
           mat-raised-button
           color="secondary"
-          (click)="_authService.logoutUser()"
+          (click)="_authService.logoutAdmin()"
         >
           Logout
+        </button></a
+      >
+
+      <a routerLink="/register" routerLinkActive="active" class="menu-item"
+        ><button
+          routerLinkActive="=list-item-active"
+          mat-raised-button
+          color="primary"
+        >
+          Register
         </button></a
       >
     </li>

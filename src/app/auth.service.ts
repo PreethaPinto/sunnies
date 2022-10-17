@@ -10,15 +10,15 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  loginUser(user: any) {
-    return this.http.post<any>(this._loginUrl, user);
+  loginAdmin(admin: any) {
+    return this.http.post<any>(this._loginUrl, admin);
   }
 
   loggedIn() {
     return !!localStorage.getItem('token');
   }
 
-  logoutUser() {
+  logoutAdmin() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
@@ -26,4 +26,7 @@ export class AuthService {
   getToken() {
     return localStorage.getItem('token');
   }
+
+  registerCustomer() {}
+  register() {}
 }

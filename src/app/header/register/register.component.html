@@ -1,0 +1,116 @@
+<mat-card class="card">
+  <mat-card-content>
+    <div class="header"><h2>REGISTER</h2></div>
+
+    <form>
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.first_name"
+          name="first_name"
+          required
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.last_name"
+          name="last_name"
+          required
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Email Address</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.email_address"
+          name="email_address"
+          required
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.password"
+          name="password"
+          type="password"
+          required=""
+        />
+      </mat-form-field>
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Phone Number</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.phone_number"
+          name="phone_number"
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Street Address</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.street_address"
+          name="street_address"
+          required
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>City</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.city"
+          name="city"
+          required
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>State</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.state"
+          name="state"
+          required
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Postcode</mat-label>
+        <input
+          matInput
+          [(ngModel)]="registerCustomerData.postcode"
+          name="postcode"
+          required
+        />
+      </mat-form-field>
+      <br />
+
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn btn-success pull-right"
+          (click)="registerCustomer()"
+        >
+          Register
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

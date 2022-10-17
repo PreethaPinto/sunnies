@@ -23,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { RegisterComponent } from './header/register/register.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { MatButtonModule } from '@angular/material/button';
     LoginComponent,
     AdminComponent,
     AdminDialogComponent,
+    RegisterComponent,
   ],
 
   imports: [
