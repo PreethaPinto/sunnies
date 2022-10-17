@@ -398,15 +398,15 @@ app.post("/register", (req, res) => {
       let request = new sql.Request();
 
       const {
-        first_name,
-        last_name,
-        phone_number,
-        email_address,
+        firstName,
+        lastName,
+        phone,
+        email,
         password,
-        street_address,
+        address,
         city,
         state,
-        postcode,
+        postCode,
         product_id,
         quantity,
       } = req.body;
@@ -414,7 +414,7 @@ app.post("/register", (req, res) => {
       let stringRequest = `INSERT INTO [customer](
       first_name,
       last_name,
-      phone_number, 
+      phone_number,
       email_address,
       password,
       street_address, 
@@ -422,34 +422,33 @@ app.post("/register", (req, res) => {
       state,
       postcode
       )
-      
-      OUTPUT Inserted.customer_id
 
       VALUES (
-        ${first_name},
-        ${last_name},
-        ${phone_number},
-        ${email_address},
-        ${password},
-        ${street_address},
-        ${city},
-        ${state},
-        ${postcode}
+        @firstName,
+        @lastName,
+        @phone,
+        @email,
+        @password,
+        @address,
+        @city,
+        @state,
+        @postcode
         )`;
-      // request.input("first_name", first_name);
-      // request.input("last_name", last_name);
-      // request.input("phone_number", phone_number);
-      // request.input("email_address", email_address);
-      // request.input("password", password);
-      // request.input("street_address", street_address);
-      // request.input("city", city);
-      // request.input("state", state);
-      // request.input("postcode", postcode);
+      request.input("firstName", firstName);
+      request.input("lastName", lastName);
+      request.input("phone", phone);
+      request.input("email", email);
+      request.input("password", password);
+      request.input("address", address);
+      request.input("city", city);
+      request.input("state", state);
+      request.input("postcode", postCode);
+      
 
       request.query(stringRequest, (err, data) => {
         if (err) {
-          console.log("There was an error connecting to database", err);
-          return;
+          console.log("There was an error", err);
+          res.send(err);
         }
 
         res.end(JSON.stringify(data)); // Result in JSON format
