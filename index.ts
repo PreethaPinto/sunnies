@@ -391,6 +391,75 @@ app.post("/login", (req, res) => {
   }
 });
 
+//Http Post for registration
+app.post("/register", (req, res) => {
+  try {
+    sql.connect(sqlConfig, function () {
+      let request = new sql.Request();
+
+      const {
+        first_name,
+        last_name,
+        phone_number,
+        email_address,
+        password,
+        street_address,
+        city,
+        state,
+        postcode,
+        product_id,
+        quantity,
+      } = req.body;
+
+      let stringRequest = `INSERT INTO [customer](
+      first_name,
+      last_name,
+      phone_number, 
+      email_address,
+      password,
+      street_address, 
+      city,
+      state,
+      postcode
+      )
+      
+      OUTPUT Inserted.customer_id
+
+      VALUES (
+        ${first_name},
+        ${last_name},
+        ${phone_number},
+        ${email_address},
+        ${password},
+        ${street_address},
+        ${city},
+        ${state},
+        ${postcode}
+        )`;
+      // request.input("first_name", first_name);
+      // request.input("last_name", last_name);
+      // request.input("phone_number", phone_number);
+      // request.input("email_address", email_address);
+      // request.input("password", password);
+      // request.input("street_address", street_address);
+      // request.input("city", city);
+      // request.input("state", state);
+      // request.input("postcode", postcode);
+
+      request.query(stringRequest, (err, data) => {
+        if (err) {
+          console.log("There was an error connecting to database", err);
+          return;
+        }
+
+        res.end(JSON.stringify(data)); // Result in JSON format
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 app.listen(8080, () => {
   console.log("Listening to port 8080");
 });
