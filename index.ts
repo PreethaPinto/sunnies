@@ -1,5 +1,5 @@
 import express from "express";
-//import * as jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import * as bodyParser from "body-parser";
 import * as sql from "mssql";
 import cors from "cors";
@@ -15,8 +15,27 @@ const sqlConfig = {
   database: "sunnies",
 };
 
+const SECRET_KEY = "}IMg0pTg_x8flg&";
+
+function verifyToken(req: any, res: any, next: any) {
+  if (!req.headers.authorization) {
+    return res.status(401).send("Unauthorized request");
+  }
+  let token = req.headers.authorization.split(" ")[1];
+  if (token === "null") {
+    return res.status(401).send("Unauthorized request");
+  }
+  try {
+    let payload = jwt.verify(token, SECRET_KEY);
+
+    next();
+  } catch (err) {
+    return res.status(401).send("Unauthorized request");
+  }
+}
+
 //Http Get for Product
-app.get("/products", (req, res) => {
+app.get("/products", verifyToken, (req, res) => {
   //connect to database
   try {
     sql.connect(sqlConfig, (err) => {
@@ -251,7 +270,7 @@ app.post("/customers", (req, res) => {
 });
 
 //Http GET for admin
-app.get("/admin", (req, res) => {
+app.get("/admin", verifyToken, (req, res) => {
   //connect to database
   try {
     sql.connect(sqlConfig, (err) => {
@@ -338,6 +357,38 @@ app.put("/admin", (req, res) => {
       res.end(JSON.stringify(data));
     });
   });
+});
+
+app.post("/login", (req, res) => {
+  try {
+    sql.connect(sqlConfig, function () {
+      let request = new sql.Request();
+      const { username, password } = req.body;
+
+      let sqlString = `Select * from [admin] where username = @username and password = @password`;
+      request.input("username", username);
+      request.input("password", password);
+
+      request.query(sqlString, function (err, data) {
+        if (err) {
+          res.status(400);
+          res.send(err);
+        } else if (data?.recordset && data?.recordset.length > 0) {
+          // auth admin
+          const admin = { data };
+          const token = jwt.sign({ admin }, SECRET_KEY, {
+            expiresIn: "1d",
+          });
+          res.send({ token: token });
+        } else {
+          res.status(401);
+          res.send("Invalid Username or Password");
+        }
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 app.listen(8080, () => {
