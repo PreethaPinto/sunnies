@@ -34,31 +34,89 @@ function verifyToken(req: any, res: any, next: any) {
   }
 }
 
-//Http Get for Product
+process.on("uncaughtException", (error, origin) => {
+  console.log("----- Uncaught exception -----");
+  console.log(error);
+  console.log("----- Exception origin -----");
+  console.log(origin);
+});
+
+//Http GET for products
+app.get("/customerProducts", (req, res) => {
+  getProducts(req, res);
+});
+
+//Http GET for products
 app.get("/products", verifyToken, (req, res) => {
-  //connect to database
+  getProducts(req, res);
+});
+
+function getProducts(req: any, res: any) {
   try {
+    const productsArray = req.query.products
+      ?.toString()
+      ?.split(",")
+      .filter(Boolean);
+    const priceArray = req.query.prices?.toString()?.split(",").filter(Boolean);
     sql.connect(sqlConfig, (err) => {
       if (err) {
-        console.log("There was an error connecting to the database", err);
+        console.log("There was an error connecting to database", err);
         return;
       }
-      //create Request object
       const request = new sql.Request();
-      //query to the database and get the records
-      request.query("select * from product", (err, data) => {
+      let products = `'` + productsArray?.join(`','`) + `'`;
+
+      let sqlString = `select * from product`;
+      if (productsArray?.length) {
+        sqlString += `and product_name in (${products})`;
+      }
+      if (priceArray?.length) {
+        sqlString += `and (1=2 `;
+        if (priceArray.includes("<500")) sqlString += ` Or Price < 500`;
+        if (priceArray.includes("500-1000"))
+          sqlString += ` Or Price between 500 and 1000`;
+        if (priceArray.includes(">1000")) sqlString += ` Or Price > 1000`;
+        sqlString += `)`;
+      }
+
+      request.query(sqlString, (err, data) => {
         if (err) {
           console.log("There was an error connecting to database", err);
           return;
         }
-        //send records as a response
         res.send(data?.recordset);
       });
     });
   } catch (err) {
     res.send(err);
   }
-});
+}
+
+// //Http Get for Product
+// app.get("/products", verifyToken, (req, res) => {
+//   //connect to database
+//   try {
+//     sql.connect(sqlConfig, (err) => {
+//       if (err) {
+//         console.log("There was an error connecting to the database", err);
+//         return;
+//       }
+//       //create Request object
+//       const request = new sql.Request();
+//       //query to the database and get the records
+//       request.query("select * from product", (err, data) => {
+//         if (err) {
+//           console.log("There was an error connecting to database", err);
+//           return;
+//         }
+//         //send records as a response
+//         res.send(data?.recordset);
+//       });
+//     });
+//   } catch (err) {
+//     res.send(err);
+//   }
+// });
 
 //Http Post for products
 app.post("/products", (req, res) => {
