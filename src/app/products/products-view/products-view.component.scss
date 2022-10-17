@@ -1,0 +1,8 @@
+.product-view-container {
+  width: 100%;
+  box-sizing: border-box;
+  .product-view-content {
+    display: flex;
+    //flex-wrap: wrap;
+  }
+}

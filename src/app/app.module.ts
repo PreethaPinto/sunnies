@@ -24,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { RegisterComponent } from './header/register/register.component';
+import { CartComponent } from './cart/cart.component';
+import { ProductsViewComponent } from './products/products-view/products-view.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { RegisterComponent } from './header/register/register.component';
     AdminComponent,
     AdminDialogComponent,
     RegisterComponent,
+    CartComponent,
+    ProductsViewComponent,
   ],
 
   imports: [

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Product, ProductsComponent } from './products/products.component';
+import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -10,8 +11,18 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProducts() {
-    return this.http.delete(this.baseURL + 'products/');
+  getProducts(
+    products: string[],
+    prices: string[],
+    isAdmin = false
+  ): Observable<Product[]> {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.appendAll({ products: products.toString() });
+    queryParams = queryParams.appendAll({ prices: prices.toString() });
+
+    return this.http.get<Product[]>(
+      this.baseURL + (isAdmin ? 'products?' : 'customerProducts?') + queryParams
+    );
   }
 
   addNewProduct(product: Product) {

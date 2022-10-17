@@ -43,7 +43,7 @@ export class ProductsComponent implements OnInit {
   }
 
   refreshList() {
-    this.service.getProducts().subscribe(
+    this.service.getProducts([], [], true).subscribe(
       (res) => (this.dataSource = res),
       (err) => {
         if (err instanceof HttpErrorResponse) {

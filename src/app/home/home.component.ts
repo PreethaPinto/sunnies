@@ -47,26 +47,27 @@ export class HomeComponent implements OnInit {
   constructor(public dialog: MatDialog, private service: ProductService) {}
 
   ngOnInit(): void {
-    // this.service.getProducts([], []).subscribe((data) => {
-    //   this.products = data;
-    //   this.brands = [...new Set(this.products.map((x) => x.product_name))];
-    // });
-    // this.brandForm.controls.brandNames.valueChanges
-    //   .pipe(filter(Boolean))
-    //   .subscribe((brandNames) => {
-    //     this.service.getProducts(brandNames, []).subscribe((data) => {
-    //       this.products = data;
-    //     });
-    //   });
-    // this.brandForm.controls.price.valueChanges
-    //   .pipe(filter(Boolean))
-    //   .subscribe((price) => {
-    //     this.service.getProducts([], price).subscribe((data) => {
-    //       this.products = data;
-    //     });
-    //   });
+    this.service.getProducts([], []).subscribe((data) => {
+      this.products = data;
+      this.brands = [...new Set(this.products.map((x) => x.product_name))];
+    });
+    this.brandForm.controls.brandNames.valueChanges
+      .pipe(filter(Boolean))
+      .subscribe((brandNames) => {
+        this.service.getProducts(brandNames, []).subscribe((data) => {
+          this.products = data;
+        });
+      });
+    this.brandForm.controls.price.valueChanges
+      .pipe(filter(Boolean))
+      .subscribe((price) => {
+        this.service.getProducts([], price).subscribe((data) => {
+          this.products = data;
+        });
+      });
   }
-
+  buyNow() {}
+  addToCart() {}
   brandForm = new FormGroup({
     brandNames: new FormControl<string[]>([]),
     price: new FormControl<string[]>([]),
