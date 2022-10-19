@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { Product, ProductsComponent } from './products/products.component';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  private baseURL = 'http://localhost:4800/';
+  private baseURL = 'http://localhost:8080/';
+
+  refreshCartCount = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient) {}
 
@@ -41,6 +44,28 @@ export class ProductService {
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify(product);
     return this.http.put(this.baseURL + 'products', body, {
+      headers: headers,
+    });
+  }
+
+  getCartCount(): Observable<Number | null> {
+    let customerId = localStorage.getItem('customerId');
+    if (customerId)
+      return this.http
+        .get<any>(this.baseURL + 'cartCount/' + customerId)
+        .pipe(map((x) => x.cartCount));
+    else return of(null);
+  }
+
+  addToCart(product: Product, quantity: number, customerId: number) {
+    const headers = { 'content-type': 'application/json' };
+    const body = JSON.stringify({
+      productId: product.productId,
+      quantity,
+      customerId,
+    });
+    console.log(body);
+    return this.http.post(this.baseURL + 'cart', body, {
       headers: headers,
     });
   }

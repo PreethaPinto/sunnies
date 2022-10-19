@@ -4,11 +4,12 @@ import { AdminService } from '../admin.service';
 import { AdminDialogComponent } from './admin-dialog/admin-dialog.component';
 
 export interface Admin {
-  admin_id: number;
-  first_name: string;
-  last_name: string;
-  admin_role: string;
+  adminId: number;
+  firstName: string;
+  lastName: string;
+  adminRole: string;
   username: string;
+  password: string;
 }
 
 @Component({
@@ -20,10 +21,9 @@ export class AdminComponent implements OnInit {
   constructor(public dialog: MatDialog, private service: AdminService) {}
 
   displayedColumns: string[] = [
-    'admin_id',
-    'first_name',
-    'last_name',
-    'admin_role',
+    'firstName',
+    'lastName',
+    'adminRole',
     'username',
     'delete',
     'edit',
@@ -50,8 +50,8 @@ export class AdminComponent implements OnInit {
       });
   }
 
-  deleteAdmin(admin_id: number) {
-    this.service.deleteAdmin(admin_id).subscribe((admin) => {
+  deleteAdmin(adminId: number) {
+    this.service.deleteAdmin(adminId).subscribe((admin) => {
       this.refreshList();
     });
   }

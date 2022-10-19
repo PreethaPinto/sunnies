@@ -6,7 +6,7 @@ import { Admin } from './admin/admin.component';
   providedIn: 'root',
 })
 export class AdminService {
-  private baseURL = 'http://localhost:4800/';
+  private baseURL = 'http://localhost:8080/';
 
   constructor(private http: HttpClient) {}
 

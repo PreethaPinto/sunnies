@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.service.getProducts([], []).subscribe((data) => {
       this.products = data;
-      this.brands = [...new Set(this.products.map((x) => x.product_name))];
+      this.brands = [...new Set(this.products.map((x) => x.productName))];
     });
     this.brandForm.controls.brandNames.valueChanges
       .pipe(filter(Boolean))
@@ -67,7 +67,14 @@ export class HomeComponent implements OnInit {
       });
   }
   buyNow() {}
-  addToCart() {}
+  addToCart(product: Product) {
+    let customerId = localStorage.getItem('customerId');
+    if (customerId)
+      this.service
+        .addToCart(product, 1, Number(customerId))
+        .subscribe(() => this.service.refreshCartCount.next(true));
+  }
+
   brandForm = new FormGroup({
     brandNames: new FormControl<string[]>([]),
     price: new FormControl<string[]>([]),

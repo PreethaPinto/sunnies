@@ -19,27 +19,37 @@ export class ProductDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
-
   productForm = new FormGroup({
-    product_id: new FormControl(this.product?.product_id),
-    product_name: new FormControl(
-      this.product?.product_name,
+    productId: new FormControl(this.product?.productId),
+    productName: new FormControl(
+      this.product?.productName,
       Validators.required
     ),
-    product_model: new FormControl(
-      this.product?.product_model,
+    productModel: new FormControl(
+      this.product?.productModel,
       Validators.required
     ),
-    brand_name: new FormControl(this.product?.brand_name, Validators.required),
-    price: new FormControl(this.product?.price, Validators.required),
+    brandName: new FormControl(this.product?.brandName, Validators.required),
+    price: new FormControl(this.product?.price, [
+      Validators.required,
+      Validators.max(32766),
+    ]),
 
-    stock_on_hand: new FormControl(
-      this.product?.stock_on_hand,
-      Validators.required
-    ),
+    stockOnHand: new FormControl(this.product?.stockOnHand, [
+      Validators.required,
+      Validators.max(32766),
+    ]),
 
-    image: new FormControl(this.product?.image, Validators.required),
+    imageUrl: new FormControl(this.product?.imageUrl, Validators.required),
   });
+  // productForm = new FormGroup({
+  //   productName: new FormControl<string>('', Validators.required),
+  //   productModel: new FormControl<string>('', Validators.required),
+  //   brandName: new FormControl<string>('', Validators.required),
+  //   imageUrl: new FormControl<string>('', Validators.required),
+  //   price: new FormControl<number | null>(null, Validators.required),
+  //   stockOnHand: new FormControl<number | null>(null, Validators.required),
+  // });
 
   addNewProduct() {
     if (this.product)

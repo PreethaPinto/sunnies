@@ -6,13 +6,13 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 export interface Product {
-  product_id?: number;
-  product_name: string;
-  product_model: string;
-  brand_name: string;
+  productId?: number;
+  productName: string;
+  productModel: string;
+  brandName: string;
   price: number;
-  stock_on_hand: number;
-  image: string;
+  stockOnHand: number;
+  imageUrl: string;
 }
 
 @Component({
@@ -28,12 +28,14 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   displayedColumns: string[] = [
-    'product_name',
-    'product_model',
-    'brand_name',
+    'productName',
+    'productModel',
+    'brandName',
     'price',
-    'stock_on_hand',
-    'image',
+    'stockOnHand',
+    'imageUrl',
+    'delete',
+    'edit',
   ];
 
   dataSource: any;

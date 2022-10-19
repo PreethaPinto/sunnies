@@ -26,6 +26,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { RegisterComponent } from './header/register/register.component';
 import { CartComponent } from './cart/cart.component';
 import { ProductsViewComponent } from './products/products-view/products-view.component';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -50,8 +52,10 @@ import { ProductsViewComponent } from './products/products-view/products-view.co
     HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCheckboxModule,
     MatSelectModule,
     MatButtonModule,
+    MatBadgeModule,
     MatToolbarModule,
     MatCardModule,
     MatDialogModule,

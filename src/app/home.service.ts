@@ -6,7 +6,7 @@ import { Customer } from './home/home.component';
   providedIn: 'root',
 })
 export class HomeService {
-  private baseURL = 'http://localhost:4800/';
+  private baseURL = 'http://localhost:8080/';
   constructor(private http: HttpClient) {}
 
   orderProduct(customer: Customer) {

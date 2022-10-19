@@ -24,6 +24,12 @@
         >Home</a
       >
 
+      <a routerLink="/cart" routerLinkActive="=list-item-active">
+        <mat-icon [matBadge]="cartCount" matBadgeColor="warn"
+          >shopping_cart
+        </mat-icon>
+      </a>
+
       <a
         *ngIf="_authService.loggedIn()"
         class="menu-item"
@@ -58,6 +64,7 @@
           Login
         </button></a
       >
+
       <a mat-list-item *ngIf="_authService.loggedIn()"
         ><button
           routerLinkActive="=list-item-active"

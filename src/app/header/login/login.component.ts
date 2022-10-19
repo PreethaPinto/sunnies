@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar,
     public _authService: AuthService
   ) {}
-  loginAdminData: any = {};
+  loginAdminData: any = { isAdminLogin: false };
 
   ngOnInit(): void {}
 
@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
       (res) => {
         console.log(res);
         localStorage.setItem('token', res.token);
+        localStorage.setItem('customerId', res.customerId);
         this.router.navigate(['/products']);
       },
       (err) => {

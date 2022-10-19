@@ -29,7 +29,7 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  registerCustomer(customer:Customer) : Observable<any> {
+  registerCustomer(customer: Customer): Observable<any> {
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify(customer);
     return this.http.post(this.baseUrl + 'register', body, {

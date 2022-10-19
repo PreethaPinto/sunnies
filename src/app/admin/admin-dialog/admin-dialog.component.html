@@ -4,19 +4,19 @@
   <mat-dialog-content>
     <mat-form-field appearance="fill">
       <mat-label>First Name</mat-label>
-      <input matInput formControlName="firstname" />
+      <input matInput formControlName="firstName" />
     </mat-form-field>
     <br />
 
     <mat-form-field appearance="fill">
       <mat-label>Last Name</mat-label>
-      <input matInput formControlName="lastname" />
+      <input matInput formControlName="lastName" />
     </mat-form-field>
     <br />
 
     <mat-form-field appearance="fill">
       <mat-label>Admin Role</mat-label>
-      <input matInput formControlName="user_role" />
+      <input matInput formControlName="adminRole" />
     </mat-form-field>
     <br />
 
@@ -28,7 +28,14 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Password</mat-label>
-      <input matInput formControlName="password" type="password" />
+      <input
+        matInput
+        formControlName="password"
+        [type]="hide ? 'password' : 'text'"
+      />
+      <mat-icon matSuffix (click)="hide = !hide">{{
+        hide ? "visibility_off" : "visibility"
+      }}</mat-icon>
     </mat-form-field>
     <br />
   </mat-dialog-content>
@@ -37,8 +44,8 @@
     <button
       mat-raised-button
       color="primary"
-      [disabled]="adminForm.invalid"
       mat-dialog-close
+      [disabled]="adminForm.invalid"
       (click)="!!admin ? updateAdmin() : addNewAdmin()"
     >
       {{ !!admin ? "Update" : "Add" }}
