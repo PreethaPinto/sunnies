@@ -1,8 +1,17 @@
-.product-view-container {
-  width: 100%;
-  box-sizing: border-box;
-  .product-view-content {
-    display: flex;
-    //flex-wrap: wrap;
-  }
+.example-card {
+  max-width: 400px;
+}
+
+.example-header-image {
+  background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
+  background-size: cover;
+}
+
+// .card {
+//   display: flex;
+// }
+
+.example-card {
+  max-width: 400px;
+  margin-bottom: 8px;
 }

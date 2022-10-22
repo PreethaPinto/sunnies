@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../product.service';
-import { Product } from '../products/products.component';
+import { Product } from '../products/Product';
 import { FormGroup, FormControl } from '@angular/forms';
 //import { OrderDialogComponent } from './order-dialog/order-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs';
+import { Router } from '@angular/router';
 
 export interface Customer {
   //order_id?: number;
@@ -44,7 +45,11 @@ export class HomeComponent implements OnInit {
     { value: '500-1000', label: '500 - 1000' },
     { value: '>1000', label: 'More than 1000' },
   ];
-  constructor(public dialog: MatDialog, private service: ProductService) {}
+  constructor(
+    public dialog: MatDialog,
+    private service: ProductService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.service.getProducts([], []).subscribe((data) => {
@@ -79,6 +84,10 @@ export class HomeComponent implements OnInit {
     brandNames: new FormControl<string[]>([]),
     price: new FormControl<string[]>([]),
   });
+
+  navigate() {
+    this.router.navigate(['/products-view']);
+  }
 
   // orderProduct(product: Product) {
   //   this.dialog

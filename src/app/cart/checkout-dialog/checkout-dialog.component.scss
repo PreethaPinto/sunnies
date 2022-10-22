@@ -1,0 +1,16 @@
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem;
+}
+
+.flexItem {
+  margin: 10px;
+}
+
+button {
+  border-radius: 50px;
+  background-color: #185951;
+}

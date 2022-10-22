@@ -4,16 +4,7 @@ import { ProductDialogComponent } from './product-dialog/product-dialog.componen
 import { ProductService } from '../product.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-
-export interface Product {
-  productId?: number;
-  productName: string;
-  productModel: string;
-  brandName: string;
-  price: number;
-  stockOnHand: number;
-  imageUrl: string;
-}
+import { Product } from './Product';
 
 @Component({
   selector: 'app-products',
@@ -28,12 +19,12 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   displayedColumns: string[] = [
+    'imageUrl',
     'productName',
     'productModel',
     'brandName',
     'price',
     'stockOnHand',
-    'imageUrl',
     'delete',
     'edit',
   ];

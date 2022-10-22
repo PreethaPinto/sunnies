@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Product, ProductsComponent } from './products/products.component';
+import { ProductsComponent } from './products/products.component';
+import { Product } from './products/Product';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, map, of } from 'rxjs';
+import { Cart } from './products/Cart';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +28,10 @@ export class ProductService {
     return this.http.get<Product[]>(
       this.baseURL + (isAdmin ? 'products?' : 'customerProducts?') + queryParams
     );
+  }
+
+  getProductById(id: number) {
+    return this.http.get(this.baseURL + 'products-view/' + id);
   }
 
   addNewProduct(product: Product) {
@@ -68,5 +74,15 @@ export class ProductService {
     return this.http.post(this.baseURL + 'cart', body, {
       headers: headers,
     });
+  }
+
+  getCartItems(): Observable<Cart[]> {
+    let customerId = localStorage.getItem('customerId');
+
+    return this.http.get<Cart[]>(this.baseURL + `cart/${customerId}`);
+  }
+
+  deleteCart(id: number) {
+    return this.http.delete(this.baseURL + 'cart/' + id);
   }
 }

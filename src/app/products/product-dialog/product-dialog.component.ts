@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Product } from '../products.component';
+import { Product } from '../Product';
 import { ProductService } from 'src/app/product.service';
 import { FormGroup, FormControl } from '@angular/forms';
 

@@ -1,5 +1,5 @@
 #my-first {
-  background: #4abdac;
+  background: #646867;
   height: 50px;
   width: 100%;
 
@@ -15,7 +15,7 @@
     .burger {
       display: none;
       cursor: pointer;
-      color: #fc4a1a;
+      color: #88bbd6;
 
       @media (max-width: 600px) {
         display: block;
@@ -68,7 +68,7 @@ a {
 }
 
 .mat-raised-button {
-  background-color: #fc4a1a;
+  background-color: #185951;
   color: white;
 }
 

@@ -28,6 +28,8 @@ import { CartComponent } from './cart/cart.component';
 import { ProductsViewComponent } from './products/products-view/products-view.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
+import { CheckoutDialogComponent } from './cart/checkout-dialog/checkout-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     RegisterComponent,
     CartComponent,
     ProductsViewComponent,
+    CheckoutDialogComponent,
   ],
 
   imports: [
@@ -59,6 +62,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatToolbarModule,
     MatCardModule,
     MatDialogModule,
+    MatListModule,
     MatSnackBarModule,
     FormsModule,
     MatTableModule,

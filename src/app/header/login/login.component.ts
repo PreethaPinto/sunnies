@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
         console.log(res);
         localStorage.setItem('token', res.token);
         localStorage.setItem('customerId', res.customerId);
-        this.router.navigate(['/products']);
+        //this.router.navigate(['/products']);
       },
       (err) => {
         this.snackBar.open('Invalid username or password', undefined, {

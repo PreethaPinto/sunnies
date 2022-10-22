@@ -18,20 +18,12 @@
 // }
 
 .mat-raised-button.mat-primary {
-  background-color: #fc4a1a;
+  background-color: #88bbd6;
 }
 
 mat-card.mat-card {
   width: 250px;
   margin: 10px;
-  background-color: #cccccc;
-  box-shadow: 2px 2px rgb(197, 196, 196);
-}
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
 }
 
 .brand,
@@ -39,7 +31,7 @@ mat-card.mat-card {
   padding-right: 50px;
 }
 
-.card-content {
-  display: flex;
-  justify-content: space-between;
-}
+// .card-content {
+//   display: flex;
+//   justify-content: space-between;
+// }
