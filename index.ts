@@ -47,7 +47,7 @@ app.get("/customerProducts", (req, res) => {
 });
 
 //Http GET for products
-app.get("/products", verifyToken, (req, res) => {
+app.get("/products", (req, res) => {
   getProducts(req, res);
 });
 
@@ -66,7 +66,15 @@ function getProducts(req: any, res: any) {
       const request = new sql.Request();
       let products = `'` + productsArray?.join(`','`) + `'`;
 
-      let sqlString = `select * from product`;
+      let sqlString = `SELECT product_id AS productId,
+                        product_name AS productName,
+                        product_model AS productModel,
+                        description,
+                        brand_name AS brandName,
+                        price,
+                        stock_on_hand AS stockOnHand,
+                        IMAGE AS imageUrl
+                      FROM product`;
       if (productsArray?.length) {
         sqlString += `and product_name in (${products})`;
       }
@@ -120,43 +128,60 @@ function getProducts(req: any, res: any) {
 
 //Http Post for products
 app.post("/products", (req, res) => {
-  sql.connect(sqlConfig, function () {
-    let request = new sql.Request();
+  try {
+    sql.connect(sqlConfig, function () {
+      let request = new sql.Request();
 
-    const {
-      product_name,
-      product_model,
-      brand_name,
-      price,
-      stock_on_hand,
-      image,
-    } = req.body;
+      const {
+        productModel,
+        productName,
+        brandName,
+        imageUrl,
+        price,
+        stockOnHand,
+        description,
+      } = req.body;
 
-    let stringRequest = `INSERT INTO [product] (
-      product_name,
-      product_model,
-      brand_name,
-      price,
-      stock_on_hand,
-      image
-    )
-    OUTPUT Inserted.product_id
-    VALUES (
-      '${product_name}',
-      '${product_model}',
-      '${brand_name}',
-      ${price},
-      ${stock_on_hand},
-      '${image}'
-    )`;
-    request.query(stringRequest, (err, data) => {
-      if (err) {
-        console.log("There was an error connecting to database", err);
-        return;
-      }
-      res.end(JSON.stringify(data));
+      let stringRequest = `INSERT INTO [product](
+        product_name,
+        product_model,
+        brand_name,
+        price,
+        stock_on_hand,
+        image,
+        description
+      )
+
+      VALUES (
+        @productName,
+        @productModel,
+        @brandName,
+        @price,
+        @stockOnHand,
+        @imageUrl,
+        @description
+        )`;
+      request.input("productModel", productModel);
+      request.input("productName", productName);
+      request.input("brandName", brandName);
+      request.input("price", price);
+      request.input("stockOnHand", stockOnHand);
+      request.input("imageUrl", imageUrl);
+      request.input("description", description);
+      // res.send(stringRequest);
+
+      request.query(stringRequest, (err, data) => {
+        if (err) {
+          console.log("There was an error", err);
+          res.send(err);
+        }
+
+        res.end(JSON.stringify(data)); // Result in JSON format
+      });
     });
-  });
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 //Http PUT for product
@@ -165,23 +190,25 @@ app.put("/products", (req, res) => {
     let request = new sql.Request();
 
     const {
-      product_name,
-      product_model,
-      brand_name,
+      productName,
+      productModel,
+      brandName,
       price,
-      stock_on_hand,
-      image,
-      product_id,
+      stockOnHand,
+      imageUrl,
+      productId,
+      description,
     } = req.body;
 
     let stringRequest = `UPDATE [product]
-    SET product_name = '${product_name}',
-    product_model = '${product_model}',
-    brand_name = '${brand_name}',
+    SET product_name = '${productName}',
+    product_model = '${productModel}',
+    brand_name = '${brandName}',
     price = ${price},
-    stock_on_hand = ${stock_on_hand},
-    image = '${image}'
-    WHERE product_id = ${product_id}
+    stock_on_hand = ${stockOnHand},
+    image = '${imageUrl}',
+    description = '${description}'
+    WHERE product_id = ${productId}
     `;
     request.query(stringRequest, (err, data) => {
       if (err) {
@@ -328,7 +355,7 @@ app.post("/customers", (req, res) => {
 });
 
 //Http GET for admin
-app.get("/admin", verifyToken, (req, res) => {
+app.get("/admin", (req, res) => {
   //connect to database
   try {
     sql.connect(sqlConfig, (err) => {
@@ -339,7 +366,198 @@ app.get("/admin", verifyToken, (req, res) => {
       //create Request object
       const request = new sql.Request();
       //query to the database and get the records
-      request.query("select * from admin", (err, data) => {
+      request.query(
+        `SELECT admin_id AS adminId,
+                      admin_role AS adminRole,
+                      first_name AS firstName,
+                      last_name AS lastName,
+                      username,
+                      password
+                    FROM admin`,
+        (err, data) => {
+          if (err) {
+            console.log("There was an error connecting to database", err);
+            return;
+          }
+          //send records as a response
+          res.send(data?.recordset);
+        }
+      );
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//Http Post for admin
+app.post("/admin", (req, res) => {
+  try {
+    sql.connect(sqlConfig, function () {
+      let request = new sql.Request();
+
+      const { firstName, lastName, adminRole, username, password } = req.body;
+      let stringRequest = `INSERT INTO [admin] (
+              first_name,
+              last_name,
+              admin_role,
+              username,
+              password
+              )
+      OUTPUT Inserted.admin_id
+      VALUES (
+              @firstName,
+              @lastName,
+              @adminRole,
+              @username,
+              @password
+              )`;
+
+      request.input("firstName", firstName);
+      request.input("lastName", lastName);
+      request.input("adminRole", adminRole);
+      request.input("username", username);
+      request.input("password", password);
+
+      request.query(stringRequest, (err, data) => {
+        if (err) {
+          console.log("There was an error connecting to database", err);
+          return;
+        }
+        res.end(JSON.stringify(data));
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//Http PUT for Admin
+app.put("/admin", (req, res) => {
+  sql.connect(sqlConfig, function () {
+    let request = new sql.Request();
+
+    const { firstName, lastName, adminRole, username, password, adminId } =
+      req.body;
+
+    let stringRequest = `UPDATE [admin]
+    SET first_name = @firstName,
+    last_name = @lastName,
+    admin_role = @adminRole,
+    username = @username,
+    password= @password
+    WHERE admin_id = @adminId
+    `;
+
+    request.input("firstName", firstName);
+    request.input("lastName", lastName);
+    request.input("adminRole", adminRole);
+    request.input("username", username);
+    request.input("password", password);
+    request.input("adminId", adminId);
+    request.query(stringRequest, (err, data) => {
+      if (err) {
+        console.log("There was an error connecting to database", err);
+        return;
+      }
+      res.end(JSON.stringify(data));
+    });
+  });
+});
+
+//Http DELETE for admin
+app.delete("/admin/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    sql.connect(sqlConfig, function () {
+      let request = new sql.Request();
+
+      let stringRequest = `Delete from admin where admin_id = ${id}`;
+      request.query(stringRequest, function (err, data) {
+        if (err) {
+          res.status(500);
+          res.send(err);
+        }
+        res.end(JSON.stringify(data)); // Result in JSON format
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+app.post("/login", (req, res) => {
+  try {
+    sql.connect(sqlConfig, function () {
+      let request = new sql.Request();
+      const { username, password, isAdminLogin } = req.body;
+      let sqlString = "";
+      if (isAdminLogin)
+        sqlString = `Select * from [admin] where username = @username and password = @password`;
+      else
+        sqlString = `Select * from [customer] where email_address = @username and password = @password`;
+      request.input("username", username);
+      request.input("password", password);
+
+      request.query(sqlString, (err, data) => {
+        if (err) {
+          res.status(400);
+          res.send(err);
+        } else if (data?.recordset && data?.recordset.length > 0) {
+          // auth admin
+          const admin = { data };
+          const token = jwt.sign({ admin }, SECRET_KEY, {
+            expiresIn: "1d",
+          });
+          var responseData = isAdminLogin
+            ? { token: token }
+            : {
+                token: token,
+                customerId: (data.recordset[0] as any).customer_id,
+              };
+          res.send(responseData);
+        } else {
+          res.status(401);
+          res.send("Invalid Username or Password");
+        }
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//Http GET for cart
+app.get("/cart/:id", (req, res) => {
+  //connect to database
+  try {
+    const { id } = req.params;
+    sql.connect(sqlConfig, (err) => {
+      if (err) {
+        console.log("There was an error connecting to the database", err);
+        return;
+      }
+      //create Request object
+      const request = new sql.Request();
+      request.input("customerId", id);
+
+      let sqlString = `SELECT cart_id AS cartId,
+            P.product_Id AS productId,
+            quantity,
+            brand_name AS brandName,
+            product_name AS productName,
+            product_model AS productModel,
+            price,
+            price * quantity AS total,
+            image AS imageUrl
+          FROM shopping_cart sc
+          INNER JOIN Product P
+            ON sc.product_id = p.product_Id`;
+      if (id && id !== "null")
+        sqlString += " WHERE sc.customer_id = @customerId";
+      else sqlString += " WHERE sc.customer_id is null";
+
+      //query to the database and get the records
+      request.query(sqlString, (err, data) => {
         if (err) {
           console.log("There was an error connecting to database", err);
           return;
@@ -353,36 +571,56 @@ app.get("/admin", verifyToken, (req, res) => {
   }
 });
 
-//Http Post for admin
-app.post("/admin", (req, res) => {
+//Http post for cart
+app.post("/cart", (req, res) => {
   try {
     sql.connect(sqlConfig, function () {
       let request = new sql.Request();
+      const { productId, quantity, customerId } = req.body;
 
-      const { first_name, last_name, admin_role, username, password } =
-        req.body;
-      let stringRequest = `INSERT INTO [admin] (
-              first_name,
-              last_name,
-              admin_role,
-              username,
-              password
-              )
-      OUTPUT Inserted.admin_id
-      VALUES (
-              '${first_name}',
-              '${last_name}',
-              '${admin_role}',
-              '${username}',
-              '${password}'
-              )`;
-      request.query(stringRequest, (err, data) => {
+      let sqlString = `INSERT INTO shopping_cart (
+                        customer_id,
+                        product_id,
+                        quantity
+                        )
+                      VALUES (
+                        @customerId,
+                        @productId,
+                        @quantity
+                        )`;
+      request.input("productId", productId);
+      request.input("quantity", quantity);
+      request.input("customerId", customerId);
+
+      request.query(sqlString, function (err, data) {
         if (err) {
-          console.log("There was an error connecting to database", err);
-          return;
+          res.status(400);
+          res.send(err);
+        } else {
+          // auth admin
+          res.status(200);
+          res.send();
         }
-        res.end(JSON.stringify(data));
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
 
+//Http delete for cart
+app.delete("/cart/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    sql.connect(sqlConfig, function () {
+      let request = new sql.Request();
+
+      let stringRequest = `Delete from shopping_cart where cart_id = ${id}`;
+      request.query(stringRequest, function (err, data) {
+        if (err) {
+          res.status(500);
+          res.send(err);
+        }
         res.end(JSON.stringify(data)); // Result in JSON format
       });
     });
@@ -391,57 +629,23 @@ app.post("/admin", (req, res) => {
   }
 });
 
-//Http PUT for Admin
-app.put("/admin", (req, res) => {
-  sql.connect(sqlConfig, function () {
-    let request = new sql.Request();
-
-    const { first_name, last_name, admin_role, username, password, admin_id } =
-      req.body;
-
-    let stringRequest = `UPDATE [admin]
-    SET first_name = '${first_name}',
-    last_name = '${last_name}',
-    admin_role = '${admin_role}',
-    username = ${username},
-    password= ${password},
-    WHERE adminpa_id = ${admin_id}
-    `;
-    request.query(stringRequest, (err, data) => {
-      if (err) {
-        console.log("There was an error connecting to database", err);
-        return;
-      }
-      res.end(JSON.stringify(data));
-    });
-  });
-});
-
-app.post("/login", (req, res) => {
+//Http get for cart count
+app.get("/cartCount/:id", (req, res) => {
   try {
+    const { id } = req.params;
     sql.connect(sqlConfig, function () {
       let request = new sql.Request();
-      const { username, password } = req.body;
-
-      let sqlString = `Select * from [admin] where username = @username and password = @password`;
-      request.input("username", username);
-      request.input("password", password);
-
-      request.query(sqlString, function (err, data) {
+      let stringRequest;
+      if (id && id !== "null")
+        stringRequest = `Select count(*) as cartCount from shopping_cart where customer_id = ${id}`;
+      else
+        stringRequest = `Select count(*) as cartCount from shopping_cart where customer_id is null`;
+      request.query(stringRequest, function (err, data) {
         if (err) {
-          res.status(400);
+          res.status(500);
           res.send(err);
-        } else if (data?.recordset && data?.recordset.length > 0) {
-          // auth admin
-          const admin = { data };
-          const token = jwt.sign({ admin }, SECRET_KEY, {
-            expiresIn: "1d",
-          });
-          res.send({ token: token });
-        } else {
-          res.status(401);
-          res.send("Invalid Username or Password");
         }
+        res.end(JSON.stringify(data?.recordset[0])); // Result in JSON format
       });
     });
   } catch (err) {
@@ -501,7 +705,6 @@ app.post("/register", (req, res) => {
       request.input("city", city);
       request.input("state", state);
       request.input("postcode", postCode);
-      
 
       request.query(stringRequest, (err, data) => {
         if (err) {
@@ -511,6 +714,52 @@ app.post("/register", (req, res) => {
 
         res.end(JSON.stringify(data)); // Result in JSON format
       });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//Http GET for checkout
+app.get("/checkout/:id", (req, res) => {
+  //connect to database
+  try {
+    const { id } = req.params;
+    sql.connect(sqlConfig, (err) => {
+      if (err) {
+        console.log("There was an error connecting to the database", err);
+        return;
+      }
+      //create Request object
+      const request = new sql.Request();
+      request.input("customerId", id);
+      //query to the database and get the records
+      request.query(
+        `SELECT cart_id AS cartId,
+            P.product_Id AS productId,
+            quantity,
+            brand_name AS brandName,
+            product_name AS productName,
+            product_model AS productModel,
+            price,
+            price * quantity AS total,
+            image AS imageUrl
+          FROM shopping_cart sc
+          INNER JOIN Customer C
+            ON sc.customer_id = C.customer_Id
+          INNER JOIN Product P
+            ON sc.product_id = p.product_Id
+          WHERE sc.customer_id = @customerId`,
+
+        (err, data) => {
+          if (err) {
+            console.log("There was an error connecting to database", err);
+            return;
+          }
+          //send records as a response
+          res.send(data?.recordset);
+        }
+      );
     });
   } catch (err) {
     res.send(err);
