@@ -10,21 +10,33 @@ import { Product } from '../Product';
   styleUrls: ['./products-view.component.scss'],
 })
 export class ProductsViewComponent implements OnInit {
-  constructor(private service: ProductService, private route: ActivatedRoute) {}
+  constructor(
+    private service: ProductService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   products: Product[] = [];
   singleProduct: any;
   ngOnInit(): void {
+    let id = this.activatedRoute.snapshot.params['id'];
+
     this.service.getProducts([], []).subscribe(
       (res: any) => {
         this.products = res;
-        this.products = this.products.filter((data: any) => data.id == 1);
+        this.products = this.products.filter(
+          (product: Product) => product.productId == id
+        );
         this.singleProduct = this.products[0];
         console.log(this.singleProduct);
       },
-      (error: any) => {
-        console.log(error);
+      (err: any) => {
+        console.log(err);
       }
     );
+  }
+  addToCart(product: Product) {
+    this.service
+      .addToCart(product, 1)
+      .subscribe(() => this.service.refreshCartCount.next(true));
   }
 }

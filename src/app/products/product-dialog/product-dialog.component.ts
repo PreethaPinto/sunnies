@@ -25,6 +25,7 @@ export class ProductDialogComponent implements OnInit {
       this.product?.productName,
       Validators.required
     ),
+    description: new FormControl(this.product?.description),
     productModel: new FormControl(
       this.product?.productModel,
       Validators.required

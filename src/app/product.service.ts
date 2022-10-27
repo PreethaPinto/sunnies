@@ -56,14 +56,15 @@ export class ProductService {
 
   getCartCount(): Observable<Number | null> {
     let customerId = localStorage.getItem('customerId');
-    if (customerId)
-      return this.http
-        .get<any>(this.baseURL + 'cartCount/' + customerId)
-        .pipe(map((x) => x.cartCount));
-    else return of(null);
+
+    return this.http
+      .get<any>(this.baseURL + 'cartCount/' + customerId)
+      .pipe(map((x) => x.cartCount));
   }
 
-  addToCart(product: Product, quantity: number, customerId: number) {
+  addToCart(product: Product, quantity: number) {
+    let customerId = localStorage.getItem('customerId');
+
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify({
       productId: product.productId,
@@ -84,5 +85,11 @@ export class ProductService {
 
   deleteCart(id: number) {
     return this.http.delete(this.baseURL + 'cart/' + id);
+  }
+
+  getCheckoutItems(): Observable<Cart[]> {
+    let customerId = localStorage.getItem('customerId');
+
+    return this.http.get<Cart[]>(this.baseURL + `checkout/${customerId}`);
   }
 }

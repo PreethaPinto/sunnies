@@ -1,56 +1,49 @@
 <form [formGroup]="brandForm">
-  <div class="flex-item">
-    <mat-form-field appearance="fill" class="brand">
-      <mat-label>Brand</mat-label>
-      <mat-select formControlName="brandNames" multiple>
-        <mat-option *ngFor="let brand of brands" [value]="brand">{{
-          brand
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <mat-form-field appearance="fill" class="brand">
+    <mat-label>Brand</mat-label>
+    <mat-select formControlName="brandNames" multiple>
+      <mat-option *ngFor="let brand of brands" [value]="brand">{{
+        brand
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field appearance="fill" class="price">
-      <mat-label>Price</mat-label>
-      <mat-select formControlName="price" multiple>
-        <mat-option *ngFor="let price of prices" [value]="price.value">{{
-          price.label
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  <mat-form-field appearance="fill" class="price">
+    <mat-label>Price</mat-label>
+    <mat-select formControlName="price" multiple>
+      <mat-option *ngFor="let price of prices" [value]="price.value">{{
+        price.label
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div class="container">
+    <mat-card *ngFor="let product of products">
+      <img
+        mat-card-image
+        [src]="product.imageUrl"
+        alt="Photo of sunglasses"
+        [routerLink]="['/products-view', product.productId]"
+      />
+      <!-- <mat-card-header>
+        <div mat-card-avatar class="product"></div>
+        <mat-card-title>{{ product.productModel }}</mat-card-title>
+        <mat-card-subtitle>{{ product.productName }}</mat-card-subtitle>
+      </mat-card-header> -->
 
-  <div class="card">
-    <mat-card class="card">
-      <mat-card *ngFor="let product of products">
-        <mat-card-header>
-          <div mat-card-avatar class="product"></div>
-          <mat-card-title>{{ product.productModel }}</mat-card-title>
-          <mat-card-subtitle>{{ product.productName }}</mat-card-subtitle>
-        </mat-card-header>
-        <img
-          mat-card-image
-          [src]="product.imageUrl"
-          alt="Photo of sunglasses"
-          routerLink="/products-view/:id"
-        />
-
-        <div class="card-content">
-          <mat-card-content>
-            <div>{{ product.price | currency }}</div>
-            <div>Stock on hand: {{ product.stockOnHand }}</div>
-          </mat-card-content>
-          <mat-card-content>
-            <button mat-raised-button color="primary">Buy Now</button>
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="addToCart(product)"
-            >
-              Add to cart
-            </button>
-          </mat-card-content>
+      <mat-card-content class="card">
+        <div>
+          <div class="productModel">{{ product.productModel }}</div>
+          <div class="productName">{{ product.productName }}</div>
         </div>
-      </mat-card>
+        <div class="price">{{ product.price | currency }}</div>
+        <!-- <div>Stock on hand: {{ product.stockOnHand }}</div> -->
+      </mat-card-content>
+      <mat-card-content>
+        <button mat-raised-button color="primary">Buy Now</button>
+        <button mat-raised-button color="primary" (click)="addToCart(product)">
+          Add to cart
+        </button>
+      </mat-card-content>
     </mat-card>
   </div>
 </form>

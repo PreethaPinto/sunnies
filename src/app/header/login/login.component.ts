@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { switchMap } from 'rxjs';
 import { AuthService } from 'src/app/auth.service';
 
 @Component({
@@ -8,29 +9,36 @@ import { AuthService } from 'src/app/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   constructor(
     private router: Router,
     private snackBar: MatSnackBar,
-    public _authService: AuthService
+    public _authService: AuthService,
+    private route: ActivatedRoute
   ) {}
   loginAdminData: any = { isAdminLogin: false };
 
-  ngOnInit(): void {}
-
   loginAdmin() {
-    this._authService.loginAdmin(this.loginAdminData).subscribe(
-      (res) => {
-        console.log(res);
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('customerId', res.customerId);
-        //this.router.navigate(['/products']);
-      },
-      (err) => {
-        this.snackBar.open('Invalid username or password', undefined, {
-          duration: 3000,
-        });
-      }
-    );
+    this._authService
+      .loginAdmin(this.loginAdminData)
+      .pipe(
+        switchMap((res) => {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('customerId', res.customerId);
+          return this.route.queryParams;
+        })
+      )
+      .subscribe(
+        (params) => {
+          let returnUrl = params['returnUrl'];
+          if (returnUrl) this.router.navigate([`/${returnUrl}`]);
+          else this.router.navigate(['/products']);
+        },
+        (err) => {
+          this.snackBar.open('Invalid username or password', undefined, {
+            duration: 3000,
+          });
+        }
+      );
   }
 }

@@ -18,7 +18,7 @@ import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './header/login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminDialogComponent } from './admin/admin-dialog/admin-dialog.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -30,6 +30,10 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { CheckoutDialogComponent } from './cart/checkout-dialog/checkout-dialog.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { LoadingInterceptor } from './http.interceptor';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { InvoiceDialogComponent } from './checkout/invoice-dialog/invoice-dialog.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +49,8 @@ import { CheckoutDialogComponent } from './cart/checkout-dialog/checkout-dialog.
     CartComponent,
     ProductsViewComponent,
     CheckoutDialogComponent,
+    CheckoutComponent,
+    InvoiceDialogComponent,
   ],
 
   imports: [
@@ -64,11 +70,14 @@ import { CheckoutDialogComponent } from './cart/checkout-dialog/checkout-dialog.
     MatDialogModule,
     MatListModule,
     MatSnackBarModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     FormsModule,
     MatTableModule,
     MatIconModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

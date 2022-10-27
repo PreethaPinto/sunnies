@@ -1,19 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-//import { AdminService } from '../admin.service';
-import { AdminDialogComponent } from '../admin/admin-dialog/admin-dialog.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ProductService } from '../product.service';
 import { Cart } from '../products/Cart';
 import { CheckoutDialogComponent } from './checkout-dialog/checkout-dialog.component';
-
-// export interface Admin {
-//   adminId: number;
-//   firstName: string;
-//   lastName: string;
-//   adminRole: string;
-//   username: string;
-//   password: string;
-// }
+import { ProductsViewComponent } from '../products/products-view/products-view.component';
 
 @Component({
   selector: 'app-cart',
@@ -23,7 +14,6 @@ import { CheckoutDialogComponent } from './checkout-dialog/checkout-dialog.compo
 export class CartComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
-    //private service: AdminService,
     private productService: ProductService
   ) {}
 
@@ -52,6 +42,7 @@ export class CartComponent implements OnInit {
   deleteCart(cart_id: number) {
     this.productService.deleteCart(cart_id).subscribe((cart) => {
       this.refreshList();
+      this.productService.refreshCartCount.next(true);
     });
   }
 
@@ -67,13 +58,4 @@ export class CartComponent implements OnInit {
   increase() {}
 
   decrease() {}
-
-  // editCart(admin: Admin) {
-  //   this.dialog
-  //     .open(AdminDialogComponent, { data: admin, width: '50vw' })
-  //     .afterClosed()
-  //     .subscribe((result) => {
-  //       this.refreshList();
-  //     });
-  // }
 }

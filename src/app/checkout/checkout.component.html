@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="left">
+    <mat-card>
+      <form [formGroup]="checkoutForm">
+        <h1 mat-dialog-title>Enter Your Details</h1>
+        <mat-dialog-content>
+          <mat-form-field appearance="fill">
+            <mat-label>Delivery Address</mat-label>
+            <input matInput formControlName="deliveryAddress" />
+          </mat-form-field>
+          <br />
+
+          <mat-form-field appearance="fill">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" />
+          </mat-form-field>
+          <br />
+
+          <mat-form-field appearance="fill">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" />
+          </mat-form-field>
+          <br />
+
+          <mat-form-field appearance="fill">
+            <mat-label>Email Address</mat-label>
+            <input matInput formControlName="emailAddress" />
+          </mat-form-field>
+          <br />
+
+          <mat-form-field appearance="fill">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone" />
+          </mat-form-field>
+          <br />
+        </mat-dialog-content>
+      </form>
+    </mat-card>
+  </div>
+
+  <div class="right">
+    <mat-card class="rightCard">
+      <h1>ORDER CONFIRMATION</h1>
+      <h2>Cart Items</h2>
+      <div class="cartItems">
+        <div>Product Name</div>
+        <div>Price</div>
+      </div>
+      <br />
+      <div class="total">
+        <h2>Product Total</h2>
+        <div>Total</div>
+      </div>
+
+      <mat-dialog-actions>
+        <button mat-raised-button (click)="openInvoiceDialog()">
+          Checkout
+        </button>
+      </mat-dialog-actions>
+    </mat-card>
+  </div>
+</div>

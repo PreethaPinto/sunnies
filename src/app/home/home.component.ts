@@ -73,11 +73,9 @@ export class HomeComponent implements OnInit {
   }
   buyNow() {}
   addToCart(product: Product) {
-    let customerId = localStorage.getItem('customerId');
-    if (customerId)
-      this.service
-        .addToCart(product, 1, Number(customerId))
-        .subscribe(() => this.service.refreshCartCount.next(true));
+    this.service
+      .addToCart(product, 1)
+      .subscribe(() => this.service.refreshCartCount.next(true));
   }
 
   brandForm = new FormGroup({
