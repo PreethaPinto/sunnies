@@ -79,8 +79,7 @@ export class ProductService {
 
   getCartItems(): Observable<Cart[]> {
     let customerId = localStorage.getItem('customerId');
-
-    return this.http.get<Cart[]>(this.baseURL + `cart/${customerId}`);
+    return this.http.get<Cart[]>(this.baseURL + `cart/${customerId ?? null}`);
   }
 
   deleteCart(id: number) {
@@ -91,5 +90,15 @@ export class ProductService {
     let customerId = localStorage.getItem('customerId');
 
     return this.http.get<Cart[]>(this.baseURL + `checkout/${customerId}`);
+  }
+
+  increaseQuantity(productId:number){
+    let customerId = localStorage.getItem('customerId');
+    return this.http.post(this.baseURL + `increaseCart`, {productId, customerId});
+  }
+
+  decreaseQuantity(productId:number){
+    let customerId = localStorage.getItem('customerId');
+    return this.http.post(this.baseURL + `decreaseCart`, {productId, customerId});
   }
 }

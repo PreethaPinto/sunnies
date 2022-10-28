@@ -16,6 +16,7 @@
       }}</mat-option>
     </mat-select>
   </mat-form-field>
+  
   <div class="container">
     <mat-card *ngFor="let product of products">
       <img
@@ -39,7 +40,7 @@
         <!-- <div>Stock on hand: {{ product.stockOnHand }}</div> -->
       </mat-card-content>
       <mat-card-content>
-        <button mat-raised-button color="primary">Buy Now</button>
+        <!-- <button mat-raised-button color="primary">Buy Now</button> -->
         <button mat-raised-button color="primary" (click)="addToCart(product)">
           Add to cart
         </button>

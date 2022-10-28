@@ -55,7 +55,17 @@ export class CartComponent implements OnInit {
       });
   }
 
-  increase() {}
+  increase(cart:Cart) {
+    this.productService.increaseQuantity(cart.productId).subscribe(()=>{
+      this.productService.refreshCartCount.next(true);
+      this.refreshList();
+    });
+  }
 
-  decrease() {}
+  decrease(cart:Cart) {
+    this.productService.decreaseQuantity(cart.productId).subscribe(()=>{
+      this.productService.refreshCartCount.next(true);
+      this.refreshList();
+    });
+  }
 }

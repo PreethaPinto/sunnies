@@ -34,6 +34,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './http.interceptor';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { InvoiceDialogComponent } from './checkout/invoice-dialog/invoice-dialog.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { InvoiceDialogComponent } from './checkout/invoice-dialog/invoice-dialog
     MatCardModule,
     MatDialogModule,
     MatListModule,
+    MatSidenavModule,
     MatSnackBarModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
     FormsModule,

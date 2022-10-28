@@ -54,28 +54,34 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.service.getProducts([], []).subscribe((data) => {
       this.products = data;
-      this.brands = [...new Set(this.products.map((x) => x.productName))];
+      this.brands = [...new Set(this.products.map((x) => x.brandName).filter(this.onlyUnique))];
     });
     this.brandForm.controls.brandNames.valueChanges
       .pipe(filter(Boolean))
       .subscribe((brandNames) => {
-        this.service.getProducts(brandNames, []).subscribe((data) => {
+        this.service.getProducts(brandNames, this.brandForm.controls.price.value!).subscribe((data) => {
           this.products = data;
         });
       });
     this.brandForm.controls.price.valueChanges
       .pipe(filter(Boolean))
       .subscribe((price) => {
-        this.service.getProducts([], price).subscribe((data) => {
+        this.service.getProducts(this.brandForm.controls.brandNames.value!, price).subscribe((data) => {
           this.products = data;
         });
       });
   }
+
+  
   buyNow() {}
   addToCart(product: Product) {
     this.service
       .addToCart(product, 1)
       .subscribe(() => this.service.refreshCartCount.next(true));
+  }
+
+  onlyUnique(value:string, index:number, self:string[]) {
+    return self.indexOf(value) === index;
   }
 
   brandForm = new FormGroup({
