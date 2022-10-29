@@ -66,8 +66,6 @@ function getProducts(req: any, res: any) {
       const request = new sql.Request();
       let products = `'` + productsArray?.join(`','`) + `'`;
 
-      
-
       let sqlString = `SELECT product_id AS productId,
                         product_name AS productName,
                         product_model AS productModel,
@@ -80,7 +78,7 @@ function getProducts(req: any, res: any) {
       if (productsArray?.length) {
         sqlString += ` and brand_name in (${products})`;
       }
-      
+
       if (priceArray?.length) {
         sqlString += ` and (1=2 `;
         if (priceArray.includes("<500")) sqlString += ` Or Price < 500`;
@@ -512,7 +510,7 @@ app.post("/login", (req, res) => {
             expiresIn: "1d",
           });
           var responseData = isAdminLogin
-            ? { token: token }
+            ? { token: token, role: (data.recordset[0] as any).admin_role }
             : {
                 token: token,
                 customerId: (data.recordset[0] as any).customer_id,
@@ -556,8 +554,53 @@ app.get("/cart/:id", (req, res) => {
           INNER JOIN Product P
             ON sc.product_id = p.product_Id`;
       if (id && id !== "null" && id !== "undefined")
-        sqlString += " WHERE sc.customer_id = @customerId";
+        sqlString +=
+          " WHERE sc.customer_id = @customerId or sc.customer_id is null";
       else sqlString += " WHERE sc.customer_id is null";
+
+      //query to the database and get the records
+      request.query(sqlString, (err, data) => {
+        if (err) {
+          console.log("There was an error connecting to database", err);
+          return;
+        }
+        //send records as a response
+        res.send(data?.recordset);
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//Http GET for cart
+app.get("/orders/:id", (req, res) => {
+  //connect to database
+  try {
+    const { id } = req.params;
+    sql.connect(sqlConfig, (err) => {
+      if (err) {
+        console.log("There was an error connecting to the database", err);
+        return;
+      }
+      //create Request object
+      const request = new sql.Request();
+      request.input("orderId", id);
+
+      let sqlString = `SELECT p.product_id,
+                      p.IMAGE as imageUrl,
+                      p.product_model as productModel,
+                      p.brand_name as brandName,
+                      p.product_name as productName,
+                      od.quantity,
+                      od.price_sold as price,
+                      price * quantity AS total
+                    FROM order_details od
+                    INNER JOIN [order] o
+                      ON od.order_id = o.order_id
+                    INNER JOIN product p
+                      ON od.product_id = p.product_id
+                    WHERE o.order_id = @orderId`;
 
       //query to the database and get the records
       request.query(sqlString, (err, data) => {
@@ -580,9 +623,9 @@ app.post("/cart", (req, res) => {
     sql.connect(sqlConfig, function () {
       let request = new sql.Request();
       const { productId, quantity, customerId } = req.body;
-      
-      let updatedCustomerId = customerId == 'undefined' ? null : customerId;
-     //  res.send(updatedCustomerId);
+
+      let updatedCustomerId = customerId == "undefined" ? null : customerId;
+      //  res.send(updatedCustomerId);
 
       let sqlString = `INSERT INTO shopping_cart (
                         customer_id,
@@ -614,20 +657,84 @@ app.post("/cart", (req, res) => {
   }
 });
 
+//Http post for checkout
+app.post("/checkout", (req, res) => {
+  try {
+    sql.connect(sqlConfig, function () {
+      let requestOrder = new sql.Request();
+      let requestOrderDetail = new sql.Request();
+      const { cartItems, customerId } = req.body;
+      let orderId: number;
+
+      let sqlOrderString = `INSERT INTO [order] (
+                        customer_id,
+                        order_date
+                        )
+                      VALUES (
+                        @customerId,
+                        @orderDate
+                        )
+                        SELECT SCOPE_IDENTITY() as orderId`;
+      requestOrder.input("customerId", customerId);
+      requestOrder.input("orderDate", new Date().toLocaleDateString());
+
+      requestOrder.query(sqlOrderString, function (err, data) {
+        if (err) {
+          res.status(400);
+          res.send(err);
+        } else {
+          cartItems.forEach((cartItem: Cart) => {
+            orderId = (data?.recordset[0] as any).orderId;
+            let sqlOrderDetailString = `INSERT INTO order_details (
+              product_id,
+              order_id,
+              quantity,
+              price_sold
+              )
+            VALUES (
+              ${cartItem.productId},
+              ${orderId},
+              ${cartItem.quantity},
+              ${cartItem.price}
+              )`;
+
+            requestOrderDetail.query(
+              sqlOrderDetailString,
+              function (err, data) {
+                if (err) {
+                  res.status(400);
+                  res.send(err);
+                } else {
+                  // res.send("came here");
+                }
+              }
+            );
+          });
+
+          res.status(200);
+          res.send({ orderId });
+        }
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 //Http post for cart
 app.post("/increaseCart", (req, res) => {
   try {
     sql.connect(sqlConfig, function () {
       let request = new sql.Request();
       const { productId, customerId } = req.body;
-      
-      let updatedCustomerId = customerId == 'undefined' ? null : customerId;
+
+      let updatedCustomerId = customerId == "undefined" ? null : customerId;
       let sqlString = `Update shopping_cart
                         Set Quantity = Quantity + 1
                         Where product_id = @productId`;
 
-      if(updatedCustomerId !== null)
-      sqlString = sqlString + ` and customer_id = @customerId`;
+      if (updatedCustomerId !== null)
+        sqlString = sqlString + ` and customer_id = @customerId`;
       else sqlString = sqlString + ` and customer_id is null`;
 
       request.input("productId", productId);
@@ -655,14 +762,14 @@ app.post("/decreaseCart", (req, res) => {
     sql.connect(sqlConfig, function () {
       let request = new sql.Request();
       const { productId, customerId } = req.body;
-      
-      let updatedCustomerId = customerId == 'undefined' ? null : customerId;
+
+      let updatedCustomerId = customerId == "undefined" ? null : customerId;
       let sqlString = `Update shopping_cart
                         Set Quantity = Quantity - 1
                         Where product_id = @productId`;
 
-      if(updatedCustomerId !== null)
-      sqlString = sqlString + ` and customer_id = @customerId`;
+      if (updatedCustomerId !== null)
+        sqlString = sqlString + ` and customer_id = @customerId`;
       else sqlString = sqlString + ` and customer_id is null`;
 
       request.input("productId", productId);
@@ -713,7 +820,7 @@ app.get("/cartCount/:id", (req, res) => {
       let request = new sql.Request();
       let stringRequest;
       if (id && id !== "null" && id !== "undefined")
-        stringRequest = `Select count(*) as cartCount from shopping_cart where customer_id = ${id}`;
+        stringRequest = `Select count(*) as cartCount from shopping_cart where customer_id = ${id} or customer_id is null`;
       else
         stringRequest = `Select count(*) as cartCount from shopping_cart where customer_id is null`;
       request.query(stringRequest, function (err, data) {
@@ -797,6 +904,48 @@ app.post("/register", (req, res) => {
 });
 
 //Http GET for checkout
+app.get("/user/:id", (req, res) => {
+  //connect to database
+  try {
+    const { id } = req.params;
+    sql.connect(sqlConfig, (err) => {
+      if (err) {
+        console.log("There was an error connecting to the database", err);
+        return;
+      }
+      //create Request object
+      const request = new sql.Request();
+      request.input("customerId", id);
+      //query to the database and get the records
+      request.query(
+        `SELECT TOP (1000) [customer_id]
+                  ,[first_name] as firstName
+                  ,[last_name] as lastName
+                  ,[phone_number] as phone
+                  ,[email_address] as email
+                  ,[street_address] as address
+                  ,[city]
+                  ,[state]
+                  ,[postcode] as postCode
+              FROM [dbo].[customer]
+              WHERE customer_id = @customerId`,
+
+        (err, data) => {
+          if (err) {
+            console.log("There was an error connecting to database", err);
+            return;
+          }
+          //send records as a response
+          res.send(data?.recordset[0]);
+        }
+      );
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//Http GET for checkout
 app.get("/checkout/:id", (req, res) => {
   //connect to database
   try {
@@ -845,3 +994,15 @@ app.get("/checkout/:id", (req, res) => {
 app.listen(8080, () => {
   console.log("Listening to port 8080");
 });
+
+export interface Cart {
+  cartId: number;
+  productId: number;
+  productName: string;
+  productModel: string;
+  brandName: string;
+  price: number;
+  total: number;
+  quantity: number;
+  imageUrl: string;
+}
