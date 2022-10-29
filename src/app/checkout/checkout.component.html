@@ -1,15 +1,9 @@
-<div class="container">
+<div class="container" [formGroup]="checkoutForm">
   <div class="left">
     <mat-card>
-      <form [formGroup]="checkoutForm">
+    
         <h1 mat-dialog-title>Enter Your Details</h1>
         <mat-dialog-content>
-          <mat-form-field appearance="fill">
-            <mat-label>Delivery Address</mat-label>
-            <input matInput formControlName="deliveryAddress" />
-          </mat-form-field>
-          <br />
-
           <mat-form-field appearance="fill">
             <mat-label>First Name</mat-label>
             <input matInput formControlName="firstName" />
@@ -24,7 +18,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Email Address</mat-label>
-            <input matInput formControlName="emailAddress" />
+            <input matInput formControlName="email" />
           </mat-form-field>
           <br />
 
@@ -33,8 +27,52 @@
             <input matInput formControlName="phone" />
           </mat-form-field>
           <br />
+
+
+          <mat-form-field  appearance="fill">
+            <mat-label>Street Address</mat-label>
+            <input
+              matInput
+              formControlName="address"
+              
+            />
+          </mat-form-field>
+          <br />
+    
+          <mat-form-field  appearance="fill">
+            <mat-label>City</mat-label>
+            <input
+              matInput
+              formControlName="city"
+              
+            />
+          </mat-form-field>
+          <br />
+    
+          <mat-form-field  appearance="fill">
+            <mat-label>State</mat-label>
+            <input
+              matInput
+              formControlName="state"
+              
+            />
+          </mat-form-field>
+          <br />
+    
+          <mat-form-field appearance="fill">
+            <mat-label>Postcode</mat-label>
+            <input
+              matInput
+              formControlName="postCode"
+              
+            />
+          </mat-form-field>
+          <br />
+
+
+
         </mat-dialog-content>
-      </form>
+     
     </mat-card>
   </div>
 
@@ -43,17 +81,66 @@
       <h1>ORDER CONFIRMATION</h1>
       <h2>Cart Items</h2>
       <div class="cartItems">
-        <div>Product Name</div>
-        <div>Price</div>
+        <table mat-table [dataSource]="cartItems" class="mat-elevation-z8">
+          <ng-container matColumnDef="imageUrl">
+            <th mat-header-cell *matHeaderCellDef>Image</th>
+            <td mat-cell *matCellDef="let element">
+              <img [src]="element.imageUrl" height="60px" />
+            </td>
+            <td mat-footer-cell *matFooterCellDef> Total </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="productName">
+            <th mat-header-cell *matHeaderCellDef>Product Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.productName }}</td>
+            <td mat-footer-cell *matFooterCellDef>  </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="productModel">
+            <th mat-header-cell *matHeaderCellDef>Product Model</th>
+            <td mat-cell *matCellDef="let element">{{ element.productModel }}</td>
+            <td mat-footer-cell *matFooterCellDef>  </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="brandName">
+            <th mat-header-cell *matHeaderCellDef>Brand Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.brandName }}</td>
+            <td mat-footer-cell *matFooterCellDef>  </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let element">{{ element.price | currency}}</td>
+            <td mat-footer-cell *matFooterCellDef>  </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Quantity</th>
+            <td mat-cell *matCellDef="let element">
+             
+              {{ element.quantity }}
+             
+            </td>
+            <td mat-footer-cell *matFooterCellDef>  </td>
+          </ng-container>
+    
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total</th>
+            <td mat-cell *matCellDef="let element">{{ element.total | currency }}</td>
+            <td mat-footer-cell *matFooterCellDef> {{getTotalCost() | currency}} </td>
+          </ng-container>
+  
+    
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+        </table>
       </div>
       <br />
-      <div class="total">
-        <h2>Product Total</h2>
-        <div>Total</div>
-      </div>
+      
 
       <mat-dialog-actions>
-        <button mat-raised-button (click)="openInvoiceDialog()">
+        <button [disabled]="checkoutForm.invalid" mat-raised-button (click)="checkout()">
           Checkout
         </button>
       </mat-dialog-actions>

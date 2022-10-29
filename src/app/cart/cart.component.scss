@@ -8,24 +8,18 @@ table {
 mat-icon.mat-icon {
   cursor: pointer;
 }
+mat-card.mat-card{
+  padding-bottom: 80px;;
+}
 
 .productDescription {
   max-width: 100px;
 }
 
-.example-card {
-  max-width: 200px;
-}
-
-.example-header-image {
-  background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
-  background-size: cover;
-}
-
 .mat-raised-button {
   background-color: #185951;
-  color: white;
-  border-radius: 50px;
+   color: white;
+  margin-top:12px;
   float: right;
   margin-right: 15px;
   width: 200px;

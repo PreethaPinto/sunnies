@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AdminService } from '../admin.service';
+import { AuthService } from '../auth.service';
 import { AdminDialogComponent } from './admin-dialog/admin-dialog.component';
 
 export interface Admin {
@@ -18,7 +19,11 @@ export interface Admin {
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
-  constructor(public dialog: MatDialog, private service: AdminService) {}
+  constructor(
+    public dialog: MatDialog,
+    private service: AdminService,
+    public authService: AuthService
+  ) {}
 
   displayedColumns: string[] = [
     'firstName',

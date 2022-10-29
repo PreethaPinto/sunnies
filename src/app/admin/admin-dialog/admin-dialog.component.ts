@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AdminService } from 'src/app/admin.service';
 import { Admin } from '../admin.component';
 
@@ -12,7 +12,8 @@ import { Admin } from '../admin.component';
 export class AdminDialogComponent implements OnInit {
   constructor(
     private service: AdminService,
-    @Inject(MAT_DIALOG_DATA) public admin: Admin
+    @Inject(MAT_DIALOG_DATA) public admin: Admin,
+    private dialog: MatDialogRef<AdminDialogComponent>
   ) {}
 
   hide: Boolean = true;
@@ -28,11 +29,15 @@ export class AdminDialogComponent implements OnInit {
   });
 
   addNewAdmin() {
-    this.service.addNewAdmin(this.adminForm.value as Admin).subscribe();
+    this.service
+      .addNewAdmin(this.adminForm.value as Admin)
+      .subscribe(() => this.dialog.close());
   }
   updateAdmin() {
     var admin: any = this.adminForm.value;
     admin.adminId = this.admin.adminId;
-    this.service.updateAdmin(this.adminForm.value as Admin).subscribe();
+    this.service
+      .updateAdmin(this.adminForm.value as Admin)
+      .subscribe(() => this.dialog.close());
   }
 }

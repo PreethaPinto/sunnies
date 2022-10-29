@@ -15,10 +15,12 @@
     <br />
 
     <mat-form-field appearance="fill">
-      <mat-label>Admin Role</mat-label>
-      <input matInput formControlName="adminRole" />
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="adminRole">
+        <mat-option value="Admin">Admin</mat-option>
+        <mat-option value="Manager"> Manager</mat-option>
+      </mat-select>
     </mat-form-field>
-    <br />
 
     <mat-form-field appearance="fill">
       <mat-label>Username</mat-label>
@@ -44,7 +46,6 @@
     <button
       mat-raised-button
       color="primary"
-      mat-dialog-close
       [disabled]="adminForm.invalid"
       (click)="!!admin ? updateAdmin() : addNewAdmin()"
     >

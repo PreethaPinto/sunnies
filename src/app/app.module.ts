@@ -33,25 +33,28 @@ import { CheckoutDialogComponent } from './cart/checkout-dialog/checkout-dialog.
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './http.interceptor';
 import { CheckoutComponent } from './checkout/checkout.component';
-import { InvoiceDialogComponent } from './checkout/invoice-dialog/invoice-dialog.component';
+
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { InvoiceComponent } from './checkout/invoice/invoice.component';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent,
-    ProductsComponent,
-    ProductDialogComponent,
-    HeaderComponent,
-    LoginComponent,
     AdminComponent,
     AdminDialogComponent,
-    RegisterComponent,
+    AppComponent,
     CartComponent,
-    ProductsViewComponent,
-    CheckoutDialogComponent,
     CheckoutComponent,
-    InvoiceDialogComponent,
+    CheckoutDialogComponent,
+    HeaderComponent,
+    HomeComponent,
+    InvoiceComponent,
+    LoginComponent,
+    OrdersComponent,
+    ProductDialogComponent,
+    ProductsComponent,
+    ProductsViewComponent,
+    RegisterComponent,
   ],
 
   imports: [

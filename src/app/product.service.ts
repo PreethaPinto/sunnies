@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, map, of } from 'rxjs';
 import { Cart } from './products/Cart';
+import { Order } from './models/order';
 
 @Injectable({
   providedIn: 'root',
@@ -71,8 +72,21 @@ export class ProductService {
       quantity,
       customerId,
     });
-    console.log(body);
     return this.http.post(this.baseURL + 'cart', body, {
+      headers: headers,
+    });
+  }
+
+  checkout(cartItems: Cart[]) {
+    let customerId = localStorage.getItem('customerId');
+
+    const headers = { 'content-type': 'application/json' };
+    const body = JSON.stringify({
+      cartItems,
+      customerId,
+    });
+
+    return this.http.post(this.baseURL + 'checkout', body, {
       headers: headers,
     });
   }
@@ -80,6 +94,10 @@ export class ProductService {
   getCartItems(): Observable<Cart[]> {
     let customerId = localStorage.getItem('customerId');
     return this.http.get<Cart[]>(this.baseURL + `cart/${customerId ?? null}`);
+  }
+
+  getOrders(orderId: number): Observable<Order[]> {
+    return this.http.get<Order[]>(this.baseURL + `orders/${orderId}`);
   }
 
   deleteCart(id: number) {
@@ -92,13 +110,19 @@ export class ProductService {
     return this.http.get<Cart[]>(this.baseURL + `checkout/${customerId}`);
   }
 
-  increaseQuantity(productId:number){
+  increaseQuantity(productId: number) {
     let customerId = localStorage.getItem('customerId');
-    return this.http.post(this.baseURL + `increaseCart`, {productId, customerId});
+    return this.http.post(this.baseURL + `increaseCart`, {
+      productId,
+      customerId,
+    });
   }
 
-  decreaseQuantity(productId:number){
+  decreaseQuantity(productId: number) {
     let customerId = localStorage.getItem('customerId');
-    return this.http.post(this.baseURL + `decreaseCart`, {productId, customerId});
+    return this.http.post(this.baseURL + `decreaseCart`, {
+      productId,
+      customerId,
+    });
   }
 }

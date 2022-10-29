@@ -31,28 +31,7 @@
     <td mat-cell *matCellDef="let element">{{ element.stockOnHand }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="delete">
-    <th mat-header-cell *matHeaderCellDef>Delete</th>
-    <td mat-cell *matCellDef="let element">
-      <mat-icon (click)="deleteProduct(element.productId)">delete</mat-icon>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="edit">
-    <th mat-header-cell *matHeaderCellDef>Edit</th>
-    <td mat-cell *matCellDef="let element">
-      <mat-icon (click)="editProduct(element)">edit</mat-icon>
-    </td>
-  </ng-container>
-
+ 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
-
-<br />
-
-<section>
-  <button mat-raised-button color="primary" (click)="addNewProduct()">
-    Add New Product
-  </button>
-</section>

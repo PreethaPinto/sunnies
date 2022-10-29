@@ -1,41 +1,7 @@
-// .container {
-//   height: 100vh;
-//   display: flex;
-// }
 
-// .left {
-//   width: 50vw;
-//   height: 100vh;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
-
-// .right {
-//   width: 50vw;
-//   height: 100vh;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
-
-// mat-form-field {
-//   width: 500px;
-// }
-
-// .rightCard {
-//   width: 500px;
-//   height: 400px;
-// }
-// .mat-raised-button {
-//   background-color: #185951;
-//   color: white;
-//   border-radius: 50px;
-//   margin-right: 15px;
-//   width: 100%;
-//   height: 50px;
-// }
-
+table{
+  width:100%;
+}
 .container {
   display: flex;
   height: 100vh;
@@ -44,13 +10,13 @@
 }
 
 .left {
-  width: 50vw;
+  width: 30vw;
   margin-left: 50px;
   margin-right: 20px;
 }
 
 .right {
-  width: 50vw;
+  width: 70vw;
   margin-right: 50px;
   margin-left: 50px;
 }
@@ -72,4 +38,9 @@ mat-form-field {
 .total {
   display: flex;
   justify-content: space-between;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+  font-size: 200%;
 }

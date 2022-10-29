@@ -3,15 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ProductService } from '../product.service';
-import { Product } from './Product';
-import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 
 @Component({
-  selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss'],
+  selector: 'app-orders',
+  templateUrl: './orders.component.html',
+  styleUrls: ['./orders.component.scss'],
 })
-export class ProductsComponent implements OnInit {
+export class OrdersComponent implements OnInit {
   constructor(
     private service: ProductService,
     public dialog: MatDialog,
@@ -25,8 +23,6 @@ export class ProductsComponent implements OnInit {
     'brandName',
     'price',
     'stockOnHand',
-    'delete',
-    'edit',
   ];
 
   dataSource: any;
@@ -46,29 +42,5 @@ export class ProductsComponent implements OnInit {
         }
       }
     );
-  }
-
-  addNewProduct() {
-    this.dialog
-      .open(ProductDialogComponent, { width: '75vw' })
-      .afterClosed()
-      .subscribe((result) => {
-        this.refreshList();
-      });
-  }
-
-  deleteProduct(product_id: number) {
-    this.service.deleteProduct(product_id).subscribe((product) => {
-      this.refreshList();
-    });
-  }
-
-  editProduct(product: Product) {
-    this.dialog
-      .open(ProductDialogComponent, { data: product, width: '75vw' })
-      .afterClosed()
-      .subscribe((result) => {
-        this.refreshList();
-      });
   }
 }

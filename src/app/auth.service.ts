@@ -20,6 +20,14 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
+  isAdmin() {
+    return localStorage.getItem('isAdmin') === 'true';
+  }
+
+  isAdminManager() {
+    return localStorage.getItem('adminRole') === 'Manager';
+  }
+
   logoutAdmin() {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
@@ -36,5 +44,9 @@ export class AuthService {
       headers: headers,
     });
   }
-  register() {}
+
+  getCurrentCustomer(): Observable<Customer> {
+    let customerId = localStorage.getItem('customerId');
+    return this.http.get<Customer>(this.baseUrl + 'user/' + customerId);
+  }
 }

@@ -25,6 +25,8 @@ export class LoginComponent {
         switchMap((res) => {
           localStorage.setItem('token', res.token);
           localStorage.setItem('customerId', res.customerId);
+          localStorage.setItem('isAdmin', this.loginAdminData?.isAdminLogin);
+          localStorage.setItem('adminRole', res.role);
           return this.route.queryParams;
         })
       )

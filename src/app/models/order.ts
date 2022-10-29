@@ -1,5 +1,4 @@
-export interface Cart {
-  cartId: number;
+export interface Order {
   productId: number;
   productName: string;
   productModel: string;
