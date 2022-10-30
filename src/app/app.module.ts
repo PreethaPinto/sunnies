@@ -37,6 +37,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { InvoiceComponent } from './checkout/invoice/invoice.component';
 import { OrdersComponent } from './orders/orders.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -58,27 +59,28 @@ import { OrdersComponent } from './orders/orders.component';
   ],
 
   imports: [
-    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule,
+    BrowserModule,
+    FormsModule,
     HttpClientModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatButtonModule,
     MatBadgeModule,
-    MatToolbarModule,
+    MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
     MatListModule,
+    MatSelectModule,
     MatSidenavModule,
     MatSnackBarModule,
-    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
-    FormsModule,
+    MatSortModule,
     MatTableModule,
-    MatIconModule,
+    MatToolbarModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    ReactiveFormsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },

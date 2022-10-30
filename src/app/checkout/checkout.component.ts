@@ -7,6 +7,7 @@ import { ProductService } from '../product.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { Customer } from '../models/customer';
 
 @Component({
   selector: 'app-checkout',
@@ -56,15 +57,29 @@ export class CheckoutComponent implements OnInit {
   });
 
   checkout() {
-    this.productService.checkout(this.cartItems).subscribe((res) => {
-      this.cartItems.forEach((cartItem) => {
-        this.productService.deleteCart(cartItem.cartId).subscribe(() => {
-          this.productService.refreshCartCount.next(true);
+    if (!localStorage.getItem('customerId')) {
+      this.authService
+        .registerCustomer(this.checkoutForm.value as Customer)
+        .subscribe((res) => {
+          localStorage.setItem('customerId', res.customerId);
+          this.createCheckoutRecords((res as any).customerId);
         });
-      });
+    } else {
+      this.createCheckoutRecords(localStorage.getItem('customerId') as string);
+    }
+  }
 
-      this.router.navigate([`/invoice/${(res as any).orderId}`]);
-    });
+  createCheckoutRecords(customerId: string) {
+    this.productService
+      .checkout(customerId, this.cartItems)
+      .subscribe((res) => {
+        this.cartItems.forEach((cartItem) => {
+          this.productService.deleteCart(cartItem.cartId).subscribe(() => {
+            this.productService.refreshCartCount.next(true);
+          });
+        });
+        this.router.navigate([`/invoice/${(res as any).orderId}`]);
+      });
   }
 
   getTotalCost() {

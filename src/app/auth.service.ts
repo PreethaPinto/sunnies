@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Customer } from './models/customer';
 
 @Injectable({
@@ -30,6 +30,9 @@ export class AuthService {
 
   logoutAdmin() {
     localStorage.removeItem('token');
+    localStorage.removeItem('customerId');
+    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('adminRole');
     this.router.navigate(['/login']);
   }
 
@@ -47,6 +50,7 @@ export class AuthService {
 
   getCurrentCustomer(): Observable<Customer> {
     let customerId = localStorage.getItem('customerId');
+    if (!customerId || customerId === 'undefined') return of();
     return this.http.get<Customer>(this.baseUrl + 'user/' + customerId);
   }
 }

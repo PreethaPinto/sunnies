@@ -6,6 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, map, of } from 'rxjs';
 import { Cart } from './products/Cart';
 import { Order } from './models/order';
+import { Customer } from './models/customer';
 
 @Injectable({
   providedIn: 'root',
@@ -77,9 +78,7 @@ export class ProductService {
     });
   }
 
-  checkout(cartItems: Cart[]) {
-    let customerId = localStorage.getItem('customerId');
-
+  checkout(customerId: string, cartItems: Cart[]) {
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify({
       cartItems,
@@ -96,8 +95,12 @@ export class ProductService {
     return this.http.get<Cart[]>(this.baseURL + `cart/${customerId ?? null}`);
   }
 
-  getOrders(orderId: number): Observable<Order[]> {
+  getOrder(orderId: number): Observable<Order[]> {
     return this.http.get<Order[]>(this.baseURL + `orders/${orderId}`);
+  }
+
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(this.baseURL + `orders`);
   }
 
   deleteCart(id: number) {
