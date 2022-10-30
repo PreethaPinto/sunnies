@@ -17,23 +17,27 @@ export class OrdersComponent implements OnInit {
   ) {}
 
   displayedColumns: string[] = [
+    'orderId',
     'imageUrl',
+    'customerName',
     'productName',
     'productModel',
     'brandName',
+    'orderDate',
     'price',
-    'stockOnHand',
+    'quantity',
+    'total',
   ];
 
-  dataSource: any;
+  orders: any[] = [];
 
   ngOnInit(): void {
     this.refreshList();
   }
 
   refreshList() {
-    this.service.getProducts([], [], true).subscribe(
-      (res) => (this.dataSource = res),
+    this.service.getOrders().subscribe(
+      (res) => (this.orders = res),
       (err) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
@@ -42,5 +46,11 @@ export class OrdersComponent implements OnInit {
         }
       }
     );
+  }
+
+  getTotalCost() {
+    return this.orders
+      .map((t) => t.total)
+      .reduce((acc, value) => acc + value, 0);
   }
 }

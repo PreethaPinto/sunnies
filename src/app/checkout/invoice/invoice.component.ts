@@ -23,13 +23,12 @@ export class InvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     let orderId = this.activatedRoute.snapshot.params['id'];
-    if (this.authService.loggedIn()) {
-      this.authService.getCurrentCustomer().subscribe((customer) => {
-        this.customer = customer;
-      });
-    }
 
-    this.productService.getOrders(orderId).subscribe((data) => {
+    this.authService.getCurrentCustomer().subscribe((customer) => {
+      this.customer = customer;
+    });
+
+    this.productService.getOrder(orderId).subscribe((data) => {
       this.orders = data;
     });
   }
