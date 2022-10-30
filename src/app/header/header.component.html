@@ -31,12 +31,12 @@
       </a>
 
       <a
-      *ngIf="_authService.loggedIn() && _authService.isAdmin()"
-      class="menu-item"
-      routerLink="/orders"
-      routerLinkActive="=list-item-active"
-      >Orders</a
-    >
+        *ngIf="_authService.loggedIn() && _authService.isAdmin()"
+        class="menu-item"
+        routerLink="/orders"
+        routerLinkActive="=list-item-active"
+        >Orders</a
+      >
 
       <a
         *ngIf="_authService.loggedIn() && _authService.isAdmin()"
@@ -50,9 +50,10 @@
         *ngIf="_authService.loggedIn() && _authService.isAdmin()"
         class="menu-item"
         routerLink="/admin"
-        routerLinkActive="=list-item-active">
+        routerLinkActive="=list-item-active"
+      >
         Admin
-        </a>
+      </a>
 
       <!-- <a
         *ngIf="_authService.loggedIn()"
