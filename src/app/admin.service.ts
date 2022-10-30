@@ -6,7 +6,7 @@ import { Admin } from './admin/admin.component';
   providedIn: 'root',
 })
 export class AdminService {
-  private baseURL = 'http://localhost:8080/';
+  private baseURL = 'https://tafe-sunnies-server.ts.r.appspot.com/';
 
   constructor(private http: HttpClient) {}
 

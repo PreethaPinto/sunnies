@@ -6,7 +6,7 @@ import { Customer } from './home/home.component';
   providedIn: 'root',
 })
 export class HomeService {
-  private baseURL = 'http://localhost:8080/';
+  private baseURL = 'https://tafe-sunnies-server.ts.r.appspot.com/';
   constructor(private http: HttpClient) {}
 
   orderProduct(customer: Customer) {

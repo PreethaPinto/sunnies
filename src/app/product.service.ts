@@ -12,7 +12,7 @@ import { Customer } from './models/customer';
   providedIn: 'root',
 })
 export class ProductService {
-  private baseURL = 'http://localhost:8080/';
+  private baseURL = 'https://tafe-sunnies-server.ts.r.appspot.com/';
 
   refreshCartCount = new BehaviorSubject<boolean>(false);
 

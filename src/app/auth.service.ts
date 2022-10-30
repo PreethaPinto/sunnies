@@ -8,7 +8,7 @@ import { Customer } from './models/customer';
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/';
+  private baseUrl = 'https://tafe-sunnies-server.ts.r.appspot.com/';
 
   constructor(private http: HttpClient, private router: Router) {}
 
