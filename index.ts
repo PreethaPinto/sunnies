@@ -991,6 +991,45 @@ app.get("/checkout/:id", (req, res) => {
   }
 });
 
+//Http GET for customer profile
+app.get("/customer-profile", (req, res) => {
+  //connect to database
+  try {
+    sql.connect(sqlConfig, (err) => {
+      if (err) {
+        console.log("There was an error connecting to the database", err);
+        return;
+      }
+      //create Request object
+      const request = new sql.Request();
+      //query to the database and get the records
+      request.query(
+        `SELECT customer_id AS customerId,
+                      first_name AS firstName,
+                      last_name AS lastName,
+                      phone_number AS phoneNumber,
+                      email_address AS emailAddress,
+                      password,
+                      street_address AS streetAddress, 
+                      city, 
+                      state,
+                      postcode
+                    FROM customer`,
+        (err, data) => {
+          if (err) {
+            console.log("There was an error connecting to database", err);
+            return;
+          }
+          //send records as a response
+          res.send(data?.recordset);
+        }
+      );
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 app.listen(8080, () => {
   console.log("Listening to port 8080");
 });
