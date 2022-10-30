@@ -3,6 +3,9 @@ import * as jwt from "jsonwebtoken";
 import * as bodyParser from "body-parser";
 import * as sql from "mssql";
 import cors from "cors";
+import * as bcrypt from "bcrypt";
+import * as crypto from "crypto";
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -497,8 +500,8 @@ app.post("/login", (req, res) => {
       else
         sqlString = `Select * from [customer] where email_address = @username and password = @password`;
       request.input("username", username);
-      request.input("password", password);
-
+      if (isAdminLogin) request.input("password", password);
+      else request.input("password", hashPassword(password));
       request.query(sqlString, (err, data) => {
         if (err) {
           res.status(400);
@@ -601,6 +604,52 @@ app.get("/orders/:id", (req, res) => {
                     INNER JOIN product p
                       ON od.product_id = p.product_id
                     WHERE o.order_id = @orderId`;
+
+      //query to the database and get the records
+      request.query(sqlString, (err, data) => {
+        if (err) {
+          console.log("There was an error connecting to database", err);
+          return;
+        }
+        //send records as a response
+        res.send(data?.recordset);
+      });
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+//Http GET for cart
+app.get("/orders", (req, res) => {
+  //connect to database
+  try {
+    sql.connect(sqlConfig, (err) => {
+      if (err) {
+        console.log("There was an error connecting to the database", err);
+        return;
+      }
+      //create Request object
+      const request = new sql.Request();
+
+      let sqlString = `SELECT p.product_id,
+                        o.order_Id as orderId,
+                        p.IMAGE as imageUrl,
+                        p.product_model as productModel,
+                        p.brand_name as brandName,
+                        p.product_name as productName,
+                        od.quantity,
+                        od.price_sold as price,
+                        o.order_date as orderDate,
+                  CONCAT(first_name,' ',c.last_name) as customerName,
+                        price * quantity AS total
+                      FROM order_details od
+                      INNER JOIN [order] o
+                        ON od.order_id = o.order_id
+                  INNER JOIN customer c
+                        ON c.customer_id = o.customer_id
+                      INNER JOIN product p
+                        ON od.product_id = p.product_id`;
 
       //query to the database and get the records
       request.query(sqlString, (err, data) => {
@@ -878,12 +927,14 @@ app.post("/register", (req, res) => {
         @city,
         @state,
         @postcode
-        )`;
+        );
+        SELECT SCOPE_IDENTITY() as customerId`;
+
       request.input("firstName", firstName);
       request.input("lastName", lastName);
       request.input("phone", phone);
       request.input("email", email);
-      request.input("password", password);
+      request.input("password", hashPassword(password));
       request.input("address", address);
       request.input("city", city);
       request.input("state", state);
@@ -895,7 +946,8 @@ app.post("/register", (req, res) => {
           res.send(err);
         }
 
-        res.end(JSON.stringify(data)); // Result in JSON format
+        let customerId = (data?.recordset[0] as any).customerId;
+        res.send({ customerId }); // Result in JSON format
       });
     });
   } catch (err) {
@@ -950,6 +1002,7 @@ app.get("/checkout/:id", (req, res) => {
   //connect to database
   try {
     const { id } = req.params;
+
     sql.connect(sqlConfig, (err) => {
       if (err) {
         console.log("There was an error connecting to the database", err);
@@ -990,6 +1043,12 @@ app.get("/checkout/:id", (req, res) => {
     res.send(err);
   }
 });
+
+function hashPassword(plaintextPassword: string): string {
+  if (!plaintextPassword) return "";
+  const md5sum = crypto.createHash("md5");
+  return md5sum.update(plaintextPassword).digest("hex");
+}
 
 app.listen(8080, () => {
   console.log("Listening to port 8080");
