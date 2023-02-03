@@ -991,7 +991,13 @@ app.get("/checkout/:id", (req, res) => {
   }
 });
 
-app.listen(8080, () => {
+function hashPassword(plaintextPassword: string): string {
+  if (!plaintextPassword) return "";
+  const md5sum = crypto.createHash("md5");
+  return md5sum.update(plaintextPassword).digest("hex");
+}
+
+app.listen(process.env.PORT || 8080, () => {
   console.log("Listening to port 8080");
 });
 
